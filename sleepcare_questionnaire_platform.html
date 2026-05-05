@@ -697,13 +697,25 @@
         <div class="container">
             <div class="results-card">
                 <h2 id="resultsTitle"></h2>
+
+                <!-- DETALHAMENTO DE RESPOSTAS -->
+                <div id="detailedAnswers" style="background: #f9fafb; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Suas Respostas</h3>
+                    <div id="answersContainer"></div>
+                </div>
+
                 <div class="score-label" id="scoreLabel"></div>
                 <div class="score-display" id="scoreDisplay"></div>
+
+                <!-- AVISOS DE SEGURANÇA -->
+                <div id="securityWarning" style="display: none;"></div>
+
                 <div class="interpretation" id="interpretation"></div>
 
                 <div style="margin-top: 2rem;">
                     <button class="btn btn-secondary" onclick="reviewAnswers()">Ver Respostas</button>
-                    <button class="btn btn-primary" onclick="backToDashboard()" style="margin-left: 1rem;">Voltar ao Dashboard</button>
+                    <button class="btn btn-secondary" onclick="exportarDados()" style="margin-left: 0.5rem;">📥 Baixar Meus Dados</button>
+                    <button class="btn btn-primary" onclick="backToDashboard()" style="margin-left: 0.5rem;">Voltar ao Dashboard</button>
                 </div>
             </div>
         </div>
@@ -1351,6 +1363,89 @@
             document.getElementById('scoreLabel').textContent = `Pontuação: ${result.score}/${result.maxScore}`;
             document.getElementById('scoreDisplay').textContent = result.score;
 
+            // MOSTRAR TODAS AS RESPOSTAS DETALHADAS
+            const detailedAnswersDiv = document.getElementById('detailedAnswers');
+            const answersContainer = document.getElementById('answersContainer');
+            let answersHTML = '';
+
+            q.questions.forEach((question, index) => {
+                const response = questionnaireResponses[index];
+                let displayResponse = response;
+
+                // Formatar resposta de acordo com tipo
+                if (typeof response === 'number') {
+                    displayResponse = response;
+                } else if (response === 'yes') {
+                    displayResponse = '✓ Sim';
+                } else if (response === 'no') {
+                    displayResponse = '✗ Não';
+                }
+
+                answersHTML += `
+                    <div style="margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        <p style="font-weight: 600; color: var(--dark); margin-bottom: 0.5rem;">
+                            ${index + 1}. ${question.text}
+                        </p>
+                        <p style="color: var(--primary); font-weight: 600;">
+                            → ${displayResponse}
+                        </p>
+                    </div>
+                `;
+            });
+
+            answersContainer.innerHTML = answersHTML;
+            detailedAnswersDiv.style.display = 'block';
+
+            // ADICIONAR AVISOS DE SEGURANÇA (ESE - Epworth)
+            const securityWarningDiv = document.getElementById('securityWarning');
+            securityWarningDiv.style.display = 'none';
+
+            if (currentQuestionnaire === 'epworth') {
+                if (result.score >= 13) {
+                    let warningLevel = 'moderada';
+                    let warningColor = '#f59e0b';
+                    let restrictions = `
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                            <li>Evite dirigir em rodovias</li>
+                            <li>Evite dirigir à noite</li>
+                            <li>Cuidado ao operar máquinas</li>
+                        </ul>
+                    `;
+
+                    if (result.score >= 16) {
+                        warningLevel = 'grave';
+                        warningColor = '#dc2626';
+                        restrictions = `
+                            <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                                <li><strong>NÃO dirija</strong> em rodovias</li>
+                                <li><strong>NÃO dirija</strong> à noite</li>
+                                <li><strong>NÃO dirija</strong> em distâncias longas</li>
+                                <li>Risco elevado de acidentes</li>
+                            </ul>
+                        `;
+                    }
+
+                    securityWarningDiv.innerHTML = `
+                        <div style="background: ${warningColor}15; border-left: 4px solid ${warningColor}; padding: 1.5rem; margin: 1.5rem 0; border-radius: 6px;">
+                            <h3 style="color: ${warningColor}; margin-bottom: 0.5rem;">
+                                ⚠️ AVISO DE SEGURANÇA
+                            </h3>
+                            <p style="color: var(--dark); font-weight: 600; margin-bottom: 0.5rem;">
+                                Você apresenta sonolência diurna ${warningLevel}.
+                            </p>
+                            <p style="color: var(--text-gray);">
+                                Isso aumenta significativamente o risco de acidentes ao dirigir.
+                            </p>
+                            ${restrictions}
+                            <p style="margin-top: 1rem; color: var(--dark); font-weight: 600;">
+                                🏥 Consulte um especialista em sono URGENTEMENTE.
+                            </p>
+                        </div>
+                    `;
+                    securityWarningDiv.style.display = 'block';
+                }
+            }
+
             const interpDiv = document.getElementById('interpretation');
             interpDiv.className = `interpretation risk-${result.riskLevel}`;
             interpDiv.innerHTML = `
@@ -1371,6 +1466,33 @@
         function backToDashboard() {
             document.getElementById('resultsScreen').style.display = 'none';
             showDashboard();
+        }
+
+        function exportarDados() {
+            const userData = {
+                paciente: {
+                    nome: currentUser.name,
+                    email: currentUser.email,
+                    cpf: currentUser.cpf,
+                    telefone: currentUser.phone
+                },
+                data_exportacao: new Date().toISOString(),
+                questionarios: currentUser.questionnaires
+            };
+
+            const dataStr = JSON.stringify(userData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `dados-sono-${currentUser.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            alert('✅ Seus dados foram baixados com sucesso!');
         }
 
         // ===== UI FUNCTIONS =====
