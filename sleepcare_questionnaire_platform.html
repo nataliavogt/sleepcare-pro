@@ -1135,7 +1135,14 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
             document.getElementById(`${tabName}-tab`).style.display = 'block';
-            event.target.classList.add('active');
+
+            // Find and activate the correct button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName === 'login' ? 'login' :
+                    tabName === 'register' ? 'criar' : 'acesso')) {
+                    btn.classList.add('active');
+                }
+            });
 
             // Load users if switching to quicklogin tab
             if (tabName === 'quicklogin') {
