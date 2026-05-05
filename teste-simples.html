@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Simples</title>
+    <style>
+        body { font-family: Arial; padding: 40px; }
+        .box { background: white; padding: 30px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background: #C76134; color: white; border: none; cursor: pointer; margin: 10px 0; }
+        button:hover { background: #a84a2a; }
+        p { margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Teste de Contas</h2>
+
+    <button onclick="alert('Botões funcionando!')">1. Teste Botão</button>
+
+    <button onclick="verificarContas()">2. Verificar Contas</button>
+    <div id="resultado"></div>
+
+    <button onclick="criarContas()">3. Criar Contas</button>
+    <div id="resultado2"></div>
+
+    <button onclick="location.reload()">4. Recarregar Página</button>
+</div>
+
+<script>
+function verificarContas() {
+    try {
+        alert('Função iniciada');
+        let contas = localStorage.getItem('sleepcare_patients');
+        alert('localStorage acessado: ' + (contas ? 'tem dados' : 'sem dados'));
+
+        let div = document.getElementById('resultado');
+        alert('div encontrada: ' + (div ? 'sim' : 'não'));
+
+        if (!contas) {
+            div.innerHTML = '<p style="color:red">Nenhuma conta encontrada!</p>';
+            alert('Nenhuma conta no localStorage');
+        } else {
+            let lista = JSON.parse(contas);
+            alert('Contas encontradas: ' + lista.length);
+            div.innerHTML = '<p style="color:green">Contas encontradas: ' + lista.length + '</p>';
+            lista.forEach(c => {
+                div.innerHTML += '<p>- ' + c.email + ' (senha: ' + c.password + ')</p>';
+            });
+        }
+    } catch(e) {
+        alert('ERRO: ' + e.message);
+    }
+}
+
+function criarContas() {
+    try {
+        alert('Criando contas...');
+        let contas = [
+            {
+                id: '1',
+                name: 'Dra. Natália',
+                email: 'nataliavogt@outlook.com',
+                password: 'Crm53990.',
+                cpf: '12345678901'
+            },
+            {
+                id: '2',
+                name: 'Teste',
+                email: 'teste@test.com',
+                password: 'teste123',
+                cpf: '12345678909'
+            }
+        ];
+
+        localStorage.setItem('sleepcare_patients', JSON.stringify(contas));
+        alert('Contas salvas no localStorage!');
+
+        document.getElementById('resultado2').innerHTML = '<p style="color:green">✓ Contas criadas!</p>';
+        alert('HTML atualizado');
+    } catch(e) {
+        alert('ERRO ao criar: ' + e.message);
+    }
+}
+</script>
+
+</body>
+</html>
