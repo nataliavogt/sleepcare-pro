@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Medicina do Sono | Dra. Natália Vogt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --secondary: #f97316;
+            --accent: #3b82f6;
+            --light: #fef9f3;
+            --dark: #1f2937;
+            --border: #e5e7eb;
+            --text-gray: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: white;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .logo-text p {
+            font-size: 11px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            padding: 10px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            padding: 10px 24px;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero h2 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            background: white;
+            padding: 80px 20px;
+            margin: 40px 0;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .about-text p {
+            font-size: 16px;
+            color: var(--text-gray);
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .traits {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .trait {
+            background: var(--light);
+            padding: 12px 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .about-visual {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .visual-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== VALUES ===== */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .value-card {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            border-top: 4px solid var(--primary);
+            text-align: center;
+        }
+
+        .value-emoji {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .value-card h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .value-card p {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+
+        /* ===== FEATURES ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border-top: 4px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+
+        /* ===== CTA ===== */
+        .cta {
+            background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 12px;
+            max-width: 1200px;
+            margin: 60px auto;
+        }
+
+        .cta h3 {
+            font-size: 32px;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cta p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+
+        /* ===== VOICE ===== */
+        .voice-section {
+            background: var(--light);
+        }
+
+        .voice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .voice-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .voice-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark);
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .voice-card p {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+
+        .voice-example {
+            background: var(--light);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--dark);
+            border-left: 3px solid var(--secondary);
+            font-style: italic;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .modal h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .modal > p {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group button:hover {
+            background: #059669;
+        }
+
+        /* ===== NOTIFICATION ===== */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.3s ease-out;
+            z-index: 2000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 36px;
+            }
+
+            .about-grid,
+            .voice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                gap: 10px;
+            }
+
+            .nav a {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-inner">
+            <a href="#" class="logo" onclick="scrollToSection('home'); return false;">
+                <div class="logo-icon">💤</div>
+                <div class="logo-text">
+                    <h1>SleepCare</h1>
+                    <p>Medicina do Sono</p>
+                </div>
+            </a>
+            <nav class="nav">
+                <a href="#values" onclick="scrollToSection('values'); return false;">Valores</a>
+                <a href="#voice" onclick="scrollToSection('voice'); return false;">Filosofia</a>
+                <a href="#features" onclick="scrollToSection('features'); return false;">Serviços</a>
+                <button class="btn-secondary" onclick="openLoginModal()">Entrar</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <h2>Sua jornada pelo <span>sono melhor</span><br>começa aqui</h2>
+        <p>Um espaço onde medicina encontra humanidade. Cuidado próximo, sincero e baseado em evidências. Vamos juntos nessa.</p>
+        <div class="hero-cta">
+            <button class="btn-primary" onclick="openLoginModal()">Começar Avaliação</button>
+            <button class="btn-secondary" onclick="scrollToSection('about'); return false;">Conheça Mais</button>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+        <div class="section-container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>Sobre Dra. Natália Vogt</h3>
+                    <p>Médica especialista em Clínica Médica com foco em <strong>Medicina do Sono</strong>. Trabalho com uma abordagem <strong>baseada em evidências científicas</strong>, mas nunca perco a humanidade.</p>
+                    <p>Acredito que saúde é <strong>simples, possível e parte do dia a dia</strong>. Você não está sozinho. Vamos juntos.</p>
+                    <div class="traits">
+                        <div class="trait">😊 Alegre</div>
+                        <div class="trait">🌬️ Leve</div>
+                        <div class="trait">🎯 Sincera</div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-icon">💚</div>
+                    <p style="font-weight: 600; color: var(--primary);">Seu espaço seguro de cuidados</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="section" id="values">
+        <div class="section-container">
+            <h2 class="section-title">Nossos <span>5 Valores</span></h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <span class="value-emoji">✨</span>
+                    <h4>Positividade</h4>
+                    <p>Até nos dias mais difíceis é possível enxergar beleza. Enfrentamos desafios com esperança.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-emoji">❤️</span>
+                    <h4>Sensibilidade</h4>
+                    <p>Ouvir, acolher, se envolver. Você está em um lugar onde sua vida tem valor.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-emoji">🤝</span>
+                    <h4>Proximidade</h4>
+                    <p>Conexão é o único jeito de apoiar de verdade. Estamos juntos nessa.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-emoji">🧠</span>
+                    <h4>Conhecimento</h4>
+                    <p>Sem atalhos. Defendemos ciência, comprovação e atualização constante.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-emoji">🌻</span>
+                    <h4>Simplicidade</h4>
+                    <p>Os momentos mais bonitos acontecem no dia a dia comum. Valorizamos a vida real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VOICE -->
+    <section class="section voice-section" id="voice">
+        <div class="section-container">
+            <h2 class="section-title">Como <span>Conversamos</span></h2>
+            <div class="voice-grid">
+                <div class="voice-card">
+                    <h4>🤗 Acolhedor</h4>
+                    <p>Empático, presente, humano. Escutamos sem pressa ou julgamento.</p>
+                    <div class="voice-example">"Entendo que você está preocupado. Vamos trabalhar juntos nessa."</div>
+                </div>
+                <div class="voice-card">
+                    <h4>🎯 Direto</h4>
+                    <p>Transparente e firme. Não prometemos milagres. Falamos a verdade com empatia.</p>
+                    <div class="voice-example">"Você precisa mudar esse hábito. Deixa que eu explico o porquê."</div>
+                </div>
+                <div class="voice-card">
+                    <h4>📚 Explicativo</h4>
+                    <p>Claro, direto e acessível. Traduzimos conceitos complexos para seu dia a dia.</p>
+                    <div class="voice-example">"Insônia é quando seu corpo não consegue descansar. Vamos entender isso juntos."</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="section-container">
+            <h2 class="section-title">Como Podemos <span>Ajudá-lo</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📓</div>
+                    <h4>Diário do Sono</h4>
+                    <p>Registre seu sono diariamente. Simples, sem complicações. Vamos entender juntos seus padrões.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Escalas Clínicas</h4>
+                    <p>Ferramentas validadas cientificamente. Avaliação precisa da sua qualidade de sono.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Protocolo TCC-i</h4>
+                    <p>Terapia baseada em evidências. 8 semanas estruturadas para transformar seu sono.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👩‍⚕️</div>
+                    <h4>Teleconsultas</h4>
+                    <p>Acompanhamento próximo. No conforto da sua casa. Com toda atenção que você merece.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Privacidade Garantida</h4>
+                    <p>Seus dados estão seguros. LGPD compliant. Conformidade total com regulamentações.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h4>Educação em Sono</h4>
+                    <p>Conteúdo claro e acessível. Sem complicações, mas com precisão científica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h3>Pronto para transformar seu sono?</h3>
+        <p>Não está sozinho nessa jornada. Vamos juntos pela qualidade do seu sono e da sua vida.</p>
+        <button class="btn-primary" onclick="openLoginModal()" style="background: white; color: var(--primary);">Começar Agora</button>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Dra. Natália Vogt - Especialista em Medicina do Sono</p>
+        <p style="margin-top: 10px; font-size: 12px;">Seu espaço seguro e acolhedor para cuidar do seu sono. Baseado em evidências. Humano por natureza.</p>
+    </footer>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeLoginModal()">×</button>
+            <h2>Bem-vindo de Volta</h2>
+            <p>Acesse sua conta para continuar sua jornada</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" placeholder="Sua senha" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Entrar</button>
+                </div>
+            </form>
+            <p style="text-align: center; margin-top: 20px; font-size: 12px; color: var(--text-gray);">
+                Não tem conta? Entre em contato: <strong>nataliavogt@outlook.com</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target.id === 'loginModal') {
+                closeLoginModal();
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('✓ Bem-vindo! Redirecionando...');
+            closeLoginModal();
+            setTimeout(() => {
+                window.location.href = 'telemedicine_platform_v2.html';
+            }, 1500);
+        });
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

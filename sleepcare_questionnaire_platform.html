@@ -1021,6 +1021,33 @@
 
         // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
+            // PRE-LOAD TEST ACCOUNT FOR TESTING
+            const testAccount = {
+                id: 'test-001',
+                name: 'Dra. Natália Teste',
+                email: 'teste@sleepcare.com',
+                phone: '(11) 98765-4321',
+                cpf: '12345678909',
+                password: 'teste123',
+                createdAt: new Date().toISOString(),
+                lgpdConsent: true,
+                lgpdConsentDate: new Date().toISOString(),
+                questionnaires: {
+                    stopBang: { completed: false, score: null, date: null, responses: [] },
+                    psqi: { completed: false, score: null, date: null, responses: [] },
+                    isi: { completed: false, score: null, date: null, responses: [] },
+                    epworth: { completed: false, score: null, date: null, responses: [] }
+                },
+                lastLogin: new Date().toISOString()
+            };
+
+            // Auto-create test account if doesn't exist
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients') || '[]');
+            if (!patients.find(p => p.email === testAccount.email)) {
+                patients.push(testAccount);
+                localStorage.setItem('sleepcare_patients', JSON.stringify(patients));
+            }
+
             loadCustomizations();
             checkLogin();
             setupEventListeners();

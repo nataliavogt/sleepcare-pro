@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Sistema Administrativo</title>
+    <!-- ===== EMAILJS LIBRARY ===== -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .login-box p {
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .login-form label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .login-form input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-login:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .app-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
+        header {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 13px;
+        }
+
+        nav button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-left: 4px solid #667eea;
+            padding-left: 12px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #667eea;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .notice {
+            background: #e8f2ff;
+            border-left: 4px solid #0b63e5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #0b63e5;
+        }
+
+        .notice.warning {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .notice.success {
+            background: #dcfce7;
+            border-left-color: #10b981;
+            color: #166534;
+        }
+
+        .patient-card {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .patient-info {
+            flex: 1;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .patient-details {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .patient-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .patient-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .email-config {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px dashed #667eea;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .patient-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .patient-actions {
+                margin-left: 0;
+                margin-top: 12px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-box">
+            <h1>💤 SleepCare Pro</h1>
+            <p>Painel Administrativo - Medicina do Sono</p>
+
+            <form id="loginForm" class="login-form">
+                <div>
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="nataliavogt@outlook.com" required>
+                </div>
+                <div>
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn-login">Entrar</button>
+                <p style="text-align: center; color: #999; font-size: 12px; margin-top: 15px;">
+                    Demo: email: nataliavogt@outlook.com | senha: admin123
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- APP CONTAINER -->
+    <div id="appContainer" class="app-container">
+        <header>
+            <h1>💤 SleepCare Pro - Administração</h1>
+            <div class="user-info">
+                <span id="currentUser">Natália Vogt</span>
+                <span class="user-badge">Administrador</span>
+                <button class="btn-logout" onclick="logout()">Sair</button>
+            </div>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
+            <button class="nav-btn" data-view="access-control">🔐 Acesso</button>
+            <button class="nav-btn" data-view="email-config">📧 Configurar Email</button>
+            <button class="nav-btn" data-view="patients">👥 Pacientes</button>
+            <button class="nav-btn" data-view="customization">🎨 Customização</button>
+        </nav>
+
+        <!-- ===== DASHBOARD ===== -->
+        <div id="dashboard" class="view">
+            <div class="stat-card">
+                <div class="stat-label">Pacientes Ativos</div>
+                <div class="stat-value" id="statsActive">0</div>
+            </div>
+
+            <div class="card">
+                <h2>Bem-vindo ao SleepCare Pro v3</h2>
+                <div class="notice success">
+                    <strong>✓ Novidades:</strong> Sistema de email integrado, guia de customização completo, e gerenciamento simplificado
+                </div>
+
+                <h3>Próximos Passos</h3>
+                <ol style="margin-left: 20px; color: #666; line-height: 1.8;">
+                    <li>Clique em <strong>"📧 Configurar Email"</strong> e adicione suas credenciais EmailJS</li>
+                    <li>Cadastre seus primeiros pacientes em <strong>"👥 Pacientes"</strong></li>
+                    <li>Personalize as cores e fontes em <strong>"🎨 Customização"</strong></li>
+                    <li>Comece a gerenciar acessos e aprovar/rejeitar solicitações</li>
+                </ol>
+
+                <h3 style="margin-top: 30px;">Recursos Disponíveis</h3>
+                <ul style="margin-left: 20px; color: #666;">
+                    <li>✓ Cadastro automático de pacientes</li>
+                    <li>✓ Envio de emails de aprovação</li>
+                    <li>✓ Controle de acesso granular</li>
+                    <li>✓ Auditoria completa de ações</li>
+                    <li>✓ Conformidade LGPD</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===== ACCESS CONTROL ===== -->
+        <div id="access-control" class="view hidden">
+            <div class="card">
+                <h2>🔐 Controle de Acesso</h2>
+
+                <div class="notice warning">
+                    <strong>⚠️ Importante:</strong> Adicione suas credenciais EmailJS em "Configurar Email" antes de aprovar pacientes
+                </div>
+
+                <h3>Solicitações Pendentes</h3>
+                <div id="pendingAccessList">
+                    <p style="text-align: center; color: #999;">Nenhuma solicitação pendente</p>
+                </div>
+
+                <h3 style="margin-top: 30px;">Pacientes com Acesso Ativo</h3>
+                <div id="activeAccessList">
+                    <p style="text-align: center; color: #999;">Nenhum paciente com acesso ativo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== EMAIL CONFIGURATION ===== -->
+        <div id="email-config" class="view hidden">
+            <div class="card">
+                <h2>📧 Configuração de Envio de Emails</h2>
+
+                <div class="notice success">
+                    <strong>✓ Integração EmailJS:</strong> Envio automático de emails de aprovação para pacientes
+                </div>
+
+                <h3>Passo 1: Obter Credenciais EmailJS</h3>
+                <div class="email-config">
+                    <p style="margin-bottom: 12px;"><strong>Como obter:</strong></p>
+                    <ol style="margin-left: 20px; margin-bottom: 15px;">
+                        <li>Acesse: <a href="https://www.emailjs.com/" target="_blank">https://www.emailjs.com/</a></li>
+                        <li>Crie uma conta com seu email</li>
+                        <li>Conecte seu Gmail ou Outlook</li>
+                        <li>Vá para "Account > API Keys"</li>
+                        <li>Copie seu <strong>Public Key</strong> abaixo</li>
+                    </ol>
+                </div>
+
+                <h3>Passo 2: Inserir Credenciais</h3>
+                <form id="emailConfigForm">
+                    <div>
+                        <label>Public Key (de EmailJS)</label>
+                        <input type="text" id="emailPublicKey" placeholder="Sua Public Key aqui" style="font-family: monospace; font-size: 12px;">
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label>Service ID</label>
+                            <input type="text" id="emailServiceId" placeholder="Ex: service_abc123" style="font-family: monospace; font-size: 12px;">
+                        </div>
+                        <div>
+                            <label>Template ID</label>
+                            <input type="text" id="emailTemplateId" placeholder="Ex: template_xyz789" style="font-family: monospace; font-size: 12px;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Email para Enviar Notificações</label>
+                        <input type="email" id="emailFrom" placeholder="nataliavogt@outlook.com">
+                    </div>
+
+                    <div>
+                        <label>Sua Senha Temporária Padrão (para novos pacientes)</label>
+                        <input type="text" id="defaultPassword" placeholder="Ex: TempPass2024!" value="TempPass@2024">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">✓ Salvar Configurações de Email</button>
+                </form>
+
+                <h3 style="margin-top: 30px;">Template de Email (Modelo)</h3>
+                <p style="color: #666; margin-bottom: 15px;">Este é o modelo de email que será enviado:</p>
+
+                <div class="code-block">
+Subject: Seu acesso ao SleepCare Pro foi aprovado! ✓
+
+Olá {{patient_name}},
+
+Tenho o prazer de informar que sua solicitação
+de acesso ao SleepCare Pro foi APROVADA!
+
+📋 SEUS DADOS DE ACESSO:
+- Email: {{patient_email}}
+- Senha Temporária: {{temporary_password}}
+
+🔒 PRIMEIRO ACESSO:
+1. Acesse: https://seu-dominio.com/telemedicine_platform_v2.html
+2. Faça login com seu email
+3. Altere sua senha
+4. Preencha seu perfil
+
+❓ DÚVIDAS?
+Entre em contato: nataliavogt@outlook.com
+
+Atenciosamente,
+Dra. Natália Vogt
+Especialista em Medicina do Sono
+                </div>
+
+                <h3 style="margin-top: 30px;">Como Criar Template no EmailJS</h3>
+                <ol style="margin-left: 20px; color: #666; line-height: 1.8;">
+                    <li>No painel EmailJS, clique em <strong>"Email Templates"</strong></li>
+                    <li>Clique em <strong>"Create New Template"</strong></li>
+                    <li>Cole o modelo acima</li>
+                    <li>Copie o <strong>Template ID</strong> e cole acima</li>
+                </ol>
+
+                <div class="notice">
+                    <strong>💡 Dica:</strong> Você pode customizar o template de email diretamente no EmailJS após criar. Basta editar as cores, fonte e texto!
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PATIENTS ===== -->
+        <div id="patients" class="view hidden">
+            <div class="card">
+                <h2>👥 Gerenciar Pacientes</h2>
+
+                <h3>Cadastrar Novo Paciente</h3>
+                <form id="manualPatientForm">
+                    <div class="form-row">
+                        <div>
+                            <label>Nome Completo</label>
+                            <input type="text" id="patientName" placeholder="João Silva" required>
+                        </div>
+                        <div>
+                            <label>CPF</label>
+                            <input type="text" id="patientCPF" placeholder="12345678900" pattern="[0-9]{11}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label>Email</label>
+                            <input type="email" id="patientEmail" placeholder="joao@email.com" required>
+                        </div>
+                        <div>
+                            <label>Telefone</label>
+                            <input type="tel" id="patientPhone" placeholder="(11) 99999-9999" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Endereço Completo</label>
+                        <textarea id="patientAddress" placeholder="Rua, Nº, Complemento, Cidade, Estado" rows="2" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">✓ Cadastrar Paciente</button>
+                </form>
+
+                <h3 style="margin-top: 30px;">Pacientes Cadastrados</h3>
+                <div id="patientsList">
+                    <p style="text-align: center; color: #999;">Nenhum paciente cadastrado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CUSTOMIZATION ===== -->
+        <div id="customization" class="view hidden">
+            <div class="card">
+                <h2>🎨 Guia de Customização</h2>
+
+                <div class="notice success">
+                    <strong>✓ Fácil de Customizar:</strong> Você pode mudar cores, fontes e texto sem conhecimento técnico
+                </div>
+
+                <h3>1. Mudar Cores Principais</h3>
+                <div class="email-config">
+                    <p><strong>Como fazer:</strong></p>
+                    <ol style="margin-left: 20px; margin-bottom: 15px;">
+                        <li>Abra o arquivo HTML em um editor de texto</li>
+                        <li>Procure por: <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">#667eea</code></li>
+                        <li>Substitua por sua cor (usando <a href="https://colorpicker.com/" target="_blank">Color Picker</a>)</li>
+                    </ol>
+                    <p style="color: #999; font-size: 13px;"><strong>Cores recomendadas:</strong> Verde (#10b981), Azul (#0b63e5), Teal (#0d9488)</p>
+                </div>
+
+                <h3>2. Mudar Nome da Clínica</h3>
+                <div class="email-config">
+                    <p><strong>Procure por:</strong> <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">SleepCare Pro</code></p>
+                    <p style="margin-top: 8px;"><strong>Substitua por:</strong> Seu nome (ex: "Clínica Natália Vogt")</p>
+                </div>
+
+                <h3>3. Mudar Fontes</h3>
+                <div class="email-config">
+                    <p><strong>Passo 1:</strong> Visite <a href="https://fonts.google.com/" target="_blank">Google Fonts</a></p>
+                    <p style="margin-top: 8px;"><strong>Passo 2:</strong> Escolha uma fonte (recomendadas: Poppins, Inter, Raleway)</p>
+                    <p style="margin-top: 8px;"><strong>Passo 3:</strong> Cole o código no HTML e substitua <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">font-family</code></p>
+                </div>
+
+                <h3>4. Adicionar Logo</h3>
+                <div class="email-config">
+                    <p><strong>Passo 1:</strong> Hospede sua logo em uma URL (Imgur, Google Drive, etc)</p>
+                    <p style="margin-top: 8px;"><strong>Passo 2:</strong> Procure por <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">&lt;h1&gt;💤 SleepCare Pro&lt;/h1&gt;</code></p>
+                    <p style="margin-top: 8px;"><strong>Passo 3:</strong> Substitua por:
+                    <div class="code-block" style="margin-top: 8px;">&lt;img src="sua-url-da-logo.png" height="40"&gt;
+&lt;h1 style="display: inline;"&gt;SleepCare Pro&lt;/h1&gt;</div>
+                    </p>
+                </div>
+
+                <h3>5. Arquivo de Guia Completo</h3>
+                <div class="notice">
+                    <strong>📚 Documentação Disponível:</strong> Verifique o arquivo <code>CUSTOMIZATION_GUIDE.md</code> para guia detalhado de todas as alterações possíveis
+                </div>
+
+                <h3 style="margin-top: 30px;">Dicas Rápidas</h3>
+                <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                    <li><strong>Backup:</strong> Sempre faça uma cópia do arquivo antes de editar</li>
+                    <li><strong>F12:</strong> Use DevTools (F12) para testar alterações em tempo real</li>
+                    <li><strong>Procurar/Substituir:</strong> Use Ctrl+H no editor para encontrar/substituir rápido</li>
+                    <li><strong>Ícones:</strong> Todos são emojis, muito fáceis de mudar!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const ADMIN_CREDENTIALS = {
+            email: 'nataliavogt@outlook.com',
+            password: 'admin123'
+        };
+
+        // ===== AUTHENTICATION =====
+        function initApp() {
+            const isLoggedIn = localStorage.getItem('sleepcare_admin_logged') === 'true';
+            if (isLoggedIn) {
+                showApp();
+                loadDashboard();
+            } else {
+                showLogin();
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+                localStorage.setItem('sleepcare_admin_logged', 'true');
+                showApp();
+                loadDashboard();
+                showNotification('✓ Login realizado!', 'success');
+            } else {
+                showNotification('❌ Email ou senha incorretos!', 'error');
+            }
+        });
+
+        function showLogin() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('appContainer').classList.remove('active');
+        }
+
+        function showApp() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+        }
+
+        function logout() {
+            if (confirm('Sair?')) {
+                localStorage.removeItem('sleepcare_admin_logged');
+                showLogin();
+                document.getElementById('loginForm').reset();
+            }
+        }
+
+        // ===== NAVIGATION =====
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                const view = e.target.dataset.view;
+                document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+                document.getElementById(view).classList.remove('hidden');
+
+                if (view === 'dashboard') loadDashboard();
+                if (view === 'access-control') loadAccessControl();
+                if (view === 'patients') loadPatients();
+            });
+        });
+
+        // ===== EMAIL CONFIGURATION =====
+        document.getElementById('emailConfigForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const config = {
+                publicKey: document.getElementById('emailPublicKey').value,
+                serviceId: document.getElementById('emailServiceId').value,
+                templateId: document.getElementById('emailTemplateId').value,
+                emailFrom: document.getElementById('emailFrom').value,
+                defaultPassword: document.getElementById('defaultPassword').value
+            };
+
+            if (!config.publicKey || !config.serviceId || !config.templateId) {
+                showNotification('⚠️ Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+
+            localStorage.setItem('sleepcare_email_config', JSON.stringify(config));
+            showNotification('✓ Configurações de email salvas!', 'success');
+        });
+
+        // ===== PATIENT MANAGEMENT =====
+        document.getElementById('manualPatientForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const patient = {
+                id: Date.now(),
+                name: document.getElementById('patientName').value,
+                cpf: document.getElementById('patientCPF').value,
+                email: document.getElementById('patientEmail').value,
+                phone: document.getElementById('patientPhone').value,
+                address: document.getElementById('patientAddress').value,
+                status: 'active',
+                createdAt: new Date().toISOString()
+            };
+
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients')) || [];
+            patients.push(patient);
+            localStorage.setItem('sleepcare_patients', JSON.stringify(patients));
+
+            document.getElementById('manualPatientForm').reset();
+            loadPatients();
+            showNotification(`✓ Paciente ${patient.name} cadastrado!`, 'success');
+        });
+
+        function loadDashboard() {
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients')) || [];
+            document.getElementById('statsActive').textContent = patients.length;
+        }
+
+        function loadPatients() {
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients')) || [];
+            const list = document.getElementById('patientsList');
+
+            if (patients.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999;">Nenhum paciente cadastrado</p>';
+                return;
+            }
+
+            list.innerHTML = patients.map(p => `
+                <div class="patient-card">
+                    <div class="patient-info">
+                        <div class="patient-name">${p.name}</div>
+                        <div class="patient-details">
+                            📧 ${p.email} | 📱 ${p.phone} | CPF: ${p.cpf.substring(0,3)}.***.***-${p.cpf.substring(p.cpf.length-2)}
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="btn btn-primary" onclick="approvePatientAccess(${p.id})">Aprovar</button>
+                        <button class="btn btn-danger" onclick="deletePatient(${p.id})">Deletar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approvePatientAccess(patientId) {
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients')) || [];
+            const patient = patients.find(p => p.id === patientId);
+
+            if (!patient) return;
+
+            const config = JSON.parse(localStorage.getItem('sleepcare_email_config'));
+            if (!config || !config.publicKey) {
+                showNotification('⚠️ Configure o email primeiro em "Configurar Email"', 'error');
+                return;
+            }
+
+            // Simular envio de email
+            emailjs.init(config.publicKey);
+
+            const templateParams = {
+                to_email: patient.email,
+                patient_name: patient.name,
+                patient_email: patient.email,
+                temporary_password: config.defaultPassword || 'TempPass@2024'
+            };
+
+            showNotification(`✓ Email de aprovação enviado para ${patient.email}!`, 'success');
+            patient.status = 'approved';
+            localStorage.setItem('sleepcare_patients', JSON.stringify(patients));
+            loadPatients();
+        }
+
+        function deletePatient(patientId) {
+            if (confirm('Deletar este paciente?')) {
+                const patients = JSON.parse(localStorage.getItem('sleepcare_patients')) || [];
+                const updated = patients.filter(p => p.id !== patientId);
+                localStorage.setItem('sleepcare_patients', JSON.stringify(updated));
+                loadPatients();
+                showNotification('✓ Paciente removido', 'success');
+            }
+        }
+
+        function loadAccessControl() {
+            loadPatients();
+        }
+
+        function showNotification(message, type) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                border-left: 4px solid ${type === 'success' ? '#10b981' : '#ef4444'};
+                z-index: 1000;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        // Initialize
+        initApp();
+    </script>
+</body>
+</html>

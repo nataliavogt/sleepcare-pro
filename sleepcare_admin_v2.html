@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Painel Administrativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C76134;
+            --secondary: #99A8AD;
+            --accent: #49401F;
+            --light: #EADACA;
+            --dark: #62210F;
+            --border: #D4C4C0;
+            --text-gray: #8B7355;
+            --success: #49401F;
+            --warning: #C76134;
+            --danger: #62210F;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f3f4f6;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            color: var(--dark);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .color-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .color-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .color-group input[type="color"] {
+            width: 100%;
+            height: 50px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #A85124;
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: #D4C4C0;
+        }
+
+        .notification {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            background: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scales-editor {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .scale-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .scale-card h4 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .scale-card textarea {
+            width: 100%;
+            min-height: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💤 SleepCare Pro - Painel Admin</h1>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('config')">⚙️ Configurações</button>
+            <button class="tab-btn" onclick="switchTab('scales')">📊 Escalas</button>
+            <button class="tab-btn" onclick="switchTab('protocol')">🔄 Protocolo</button>
+            <button class="tab-btn" onclick="switchTab('content')">📝 Conteúdo</button>
+            <button class="tab-btn" onclick="switchTab('backup')">💾 Backups</button>
+        </div>
+
+        <!-- CONFIGURAÇÕES -->
+        <div id="config" class="tab-content active">
+            <div id="notification"></div>
+
+            <div class="card">
+                <h2>🎨 Personalizar Cores</h2>
+                <form onsubmit="saveColors(event)">
+                    <div class="color-grid">
+                        <div class="color-group">
+                            <label>Cor Principal</label>
+                            <input type="color" id="colorPrimary" value="#C76134">
+                        </div>
+                        <div class="color-group">
+                            <label>Cor Secundária</label>
+                            <input type="color" id="colorSecondary" value="#99A8AD">
+                        </div>
+                        <div class="color-group">
+                            <label>Cor de Destaque</label>
+                            <input type="color" id="colorAccent" value="#49401F">
+                        </div>
+                        <div class="color-group">
+                            <label>Fundo Claro</label>
+                            <input type="color" id="colorLight" value="#EADACA">
+                        </div>
+                        <div class="color-group">
+                            <label>Texto Escuro</label>
+                            <input type="color" id="colorDark" value="#62210F">
+                        </div>
+                        <div class="color-group">
+                            <label>Cor de Borda</label>
+                            <input type="color" id="colorBorder" value="#D4C4C0">
+                        </div>
+                        <div class="color-group">
+                            <label>Texto Cinza</label>
+                            <input type="color" id="colorTextGray" value="#8B7355">
+                        </div>
+                        <div class="color-group">
+                            <label>Cor de Sucesso</label>
+                            <input type="color" id="colorSuccess" value="#49401F">
+                        </div>
+                        <div class="color-group">
+                            <label>Cor de Alerta</label>
+                            <input type="color" id="colorWarning" value="#C76134">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Salvar Cores</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetColors()">Restaurar Padrão</button>
+                        <button type="button" class="btn btn-secondary" onclick="exportColors()">💾 Exportar Cores</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>🖼️ Logo e Fonte</h2>
+                <form onsubmit="saveBranding(event)">
+                    <div class="form-group">
+                        <label>Logo da Clínica (PNG ou JPG)</label>
+                        <input type="file" id="logoUpload" accept="image/png,image/jpeg" onchange="previewLogo(event)">
+                        <div id="logoPreview" style="margin-top: 1rem; width: 100px; height: 100px; background: var(--light); border: 2px dashed var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-gray);">Preview</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fonte da Plataforma</label>
+                        <select id="fontFamily">
+                            <option value="DM Sans">DM Sans (Recomendado)</option>
+                            <option value="Poppins">Poppins</option>
+                            <option value="Inter">Inter</option>
+                            <option value="Roboto">Roboto</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Salvar Logo e Fonte</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ESCALAS -->
+        <div id="scales" class="tab-content">
+            <div class="card">
+                <h2>📊 Escalas Clínicas</h2>
+                <form onsubmit="saveScales(event)">
+                    <div class="scales-editor">
+                        <div class="scale-card">
+                            <h4>📋 PSQI</h4>
+                            <textarea id="scalePSQI" placeholder="Descrição do PSQI..."></textarea>
+                        </div>
+                        <div class="scale-card">
+                            <h4>😴 ISI</h4>
+                            <textarea id="scaleISI" placeholder="Descrição do ISI..."></textarea>
+                        </div>
+                        <div class="scale-card">
+                            <h4>🧠 ESE</h4>
+                            <textarea id="scaleESE" placeholder="Descrição do ESE..."></textarea>
+                        </div>
+                        <div class="scale-card">
+                            <h4>⚠️ STOP-BANG</h4>
+                            <textarea id="scaleSTOPBANG" placeholder="Descrição do STOP-BANG..."></textarea>
+                        </div>
+                    </div>
+                    <div class="button-group" style="margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-primary">Salvar Escalas</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetScales()">Restaurar Padrão</button>
+                        <button type="button" class="btn btn-secondary" onclick="exportScales()">💾 Exportar Escalas</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PROTOCOLO -->
+        <div id="protocol" class="tab-content">
+            <div class="card">
+                <h2>🔄 Protocolo TCC-i (8 Semanas)</h2>
+                <form onsubmit="saveProtocol(event)">
+                    <div class="form-group">
+                        <label>Introdução do Protocolo</label>
+                        <textarea id="protocolIntro" placeholder="Introdução..."></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>Semana 1</label>
+                            <textarea id="protocolWeek1" placeholder="Semana 1..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 2</label>
+                            <textarea id="protocolWeek2" placeholder="Semana 2..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 3</label>
+                            <textarea id="protocolWeek3" placeholder="Semana 3..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 4</label>
+                            <textarea id="protocolWeek4" placeholder="Semana 4..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 5</label>
+                            <textarea id="protocolWeek5" placeholder="Semana 5..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 6</label>
+                            <textarea id="protocolWeek6" placeholder="Semana 6..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 7</label>
+                            <textarea id="protocolWeek7" placeholder="Semana 7..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Semana 8</label>
+                            <textarea id="protocolWeek8" placeholder="Semana 8..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="button-group" style="margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-primary">Salvar Protocolo</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetProtocol()">Restaurar Padrão</button>
+                        <button type="button" class="btn btn-secondary" onclick="exportProtocol()">💾 Exportar Protocolo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO -->
+        <div id="content" class="tab-content">
+            <div class="card">
+                <h2>📝 Conteúdo da Plataforma</h2>
+                <form onsubmit="saveContent(event)">
+                    <div class="form-group">
+                        <label>Título de Boas-vindas</label>
+                        <input type="text" id="welcomeTitle" value="Bem-vindo ao SleepCare Pro">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descrição de Boas-vindas</label>
+                        <textarea id="welcomeDescription" placeholder="Digite a descrição..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Salvar Conteúdo</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetContent()">Restaurar Padrão</button>
+                        <button type="button" class="btn btn-secondary" onclick="exportContent()">💾 Exportar Conteúdo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- BACKUPS -->
+        <div id="backup" class="tab-content">
+            <div class="card">
+                <h2>💾 Gerenciador de Backups</h2>
+                <p style="color: var(--text-gray); margin-bottom: 1.5rem;">
+                    Seus backups são salvos automaticamente quando você clica em "Exportar". Aqui você pode gerenciar todas as edições salvas.
+                </p>
+
+                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--dark); margin-bottom: 1rem;">📂 Pastas de Backup</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary);">
+                            <strong>🎨 Cores</strong><br>
+                            <small style="color: var(--text-gray);">backups/cores/</small><br>
+                            <button class="btn btn-secondary" style="margin-top: 0.5rem; width: 100%; font-size: 0.85rem;" onclick="downloadAllBackups('cores')">Baixar</button>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary);">
+                            <strong>📊 Escalas</strong><br>
+                            <small style="color: var(--text-gray);">backups/escalas/</small><br>
+                            <button class="btn btn-secondary" style="margin-top: 0.5rem; width: 100%; font-size: 0.85rem;" onclick="downloadAllBackups('escalas')">Baixar</button>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary);">
+                            <strong>🔄 Protocolo</strong><br>
+                            <small style="color: var(--text-gray);">backups/protocolo/</small><br>
+                            <button class="btn btn-secondary" style="margin-top: 0.5rem; width: 100%; font-size: 0.85rem;" onclick="downloadAllBackups('protocolo')">Baixar</button>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary);">
+                            <strong>📝 Conteúdo</strong><br>
+                            <small style="color: var(--text-gray);">backups/conteudo/</small><br>
+                            <button class="btn btn-secondary" style="margin-top: 0.5rem; width: 100%; font-size: 0.85rem;" onclick="downloadAllBackups('conteudo')">Baixar</button>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary);">
+                            <strong>🖼️ Branding</strong><br>
+                            <small style="color: var(--text-gray);">backups/branding/</small><br>
+                            <button class="btn btn-secondary" style="margin-top: 0.5rem; width: 100%; font-size: 0.85rem;" onclick="downloadAllBackups('branding')">Baixar</button>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary);">
+                            <strong>🔐 Backup Completo</strong><br>
+                            <small style="color: var(--text-gray);">Todos os dados</small><br>
+                            <button class="btn btn-primary" style="margin-top: 0.5rem; width: 100%; font-size: 0.85rem;" onclick="exportFullBackup()">💾 Exportar Tudo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent);">
+                    <h3 style="color: var(--dark); margin-bottom: 1rem;">📥 Importar Backup</h3>
+                    <div class="form-group">
+                        <label>Selecione um arquivo JSON para restaurar:</label>
+                        <input type="file" id="importFile" accept=".json" onchange="importBackup(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TAB SWITCHING
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // NOTIFICATION
+        function showNotification(message, type = 'success') {
+            const notif = document.getElementById('notification');
+            notif.innerHTML = `<div class="notification ${type}">${message}</div>`;
+            setTimeout(() => notif.innerHTML = '', 3000);
+        }
+
+        // COLORS
+        function saveColors(e) {
+            e.preventDefault();
+            const colors = {
+                primary: document.getElementById('colorPrimary').value,
+                secondary: document.getElementById('colorSecondary').value,
+                accent: document.getElementById('colorAccent').value,
+                light: document.getElementById('colorLight').value,
+                dark: document.getElementById('colorDark').value,
+                border: document.getElementById('colorBorder').value,
+                textGray: document.getElementById('colorTextGray').value,
+                success: document.getElementById('colorSuccess').value,
+                warning: document.getElementById('colorWarning').value
+            };
+
+            let settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+            settings.customColors = colors;
+            localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+
+            const cssVars = Object.entries(colors)
+                .map(([key, value]) => `--${key === 'textGray' ? 'text-gray' : key}: ${value}`)
+                .join(';');
+            localStorage.setItem('sleepcare_css_overrides', `:root { ${cssVars}; }`);
+
+            showNotification('✅ Cores salvas com sucesso!');
+        }
+
+        function resetColors() {
+            if (confirm('Restaurar cores padrão?')) {
+                document.getElementById('colorPrimary').value = '#C76134';
+                document.getElementById('colorSecondary').value = '#99A8AD';
+                document.getElementById('colorAccent').value = '#49401F';
+                document.getElementById('colorLight').value = '#EADACA';
+                document.getElementById('colorDark').value = '#62210F';
+                document.getElementById('colorBorder').value = '#D4C4C0';
+                document.getElementById('colorTextGray').value = '#8B7355';
+                document.getElementById('colorSuccess').value = '#49401F';
+                document.getElementById('colorWarning').value = '#C76134';
+                showNotification('🔄 Cores restauradas');
+            }
+        }
+
+        // SCALES
+        function saveScales(e) {
+            e.preventDefault();
+            const scales = {
+                psqi: document.getElementById('scalePSQI').value,
+                isi: document.getElementById('scaleISI').value,
+                ese: document.getElementById('scaleESE').value,
+                stopBang: document.getElementById('scaleSTOPBANG').value
+            };
+
+            let settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+            settings.customContent = settings.customContent || {};
+            settings.customContent.scales = scales;
+            localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+
+            showNotification('✅ Escalas salvas com sucesso!');
+        }
+
+        function resetScales() {
+            if (confirm('Restaurar escalas padrão?')) {
+                document.getElementById('scalePSQI').value = '';
+                document.getElementById('scaleISI').value = '';
+                document.getElementById('scaleESE').value = '';
+                document.getElementById('scaleSTOPBANG').value = '';
+                showNotification('🔄 Escalas restauradas');
+            }
+        }
+
+        // PROTOCOL
+        function saveProtocol(e) {
+            e.preventDefault();
+            const protocol = {
+                intro: document.getElementById('protocolIntro').value,
+                weeks: {}
+            };
+            for (let i = 1; i <= 8; i++) {
+                protocol.weeks[i] = document.getElementById(`protocolWeek${i}`).value;
+            }
+
+            let settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+            settings.customContent = settings.customContent || {};
+            settings.customContent.protocol = protocol;
+            localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+
+            showNotification('✅ Protocolo salvo com sucesso!');
+        }
+
+        function resetProtocol() {
+            if (confirm('Restaurar protocolo padrão?')) {
+                document.getElementById('protocolIntro').value = '';
+                for (let i = 1; i <= 8; i++) {
+                    document.getElementById(`protocolWeek${i}`).value = '';
+                }
+                showNotification('🔄 Protocolo restaurado');
+            }
+        }
+
+        // CONTENT
+        function saveContent(e) {
+            e.preventDefault();
+            const content = {
+                welcomeTitle: document.getElementById('welcomeTitle').value,
+                welcomeDescription: document.getElementById('welcomeDescription').value
+            };
+
+            let settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+            settings.customContent = settings.customContent || {};
+            Object.assign(settings.customContent, content);
+            localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+
+            showNotification('✅ Conteúdo salvo com sucesso!');
+        }
+
+        function resetContent() {
+            if (confirm('Restaurar conteúdo padrão?')) {
+                document.getElementById('welcomeTitle').value = 'Bem-vindo ao SleepCare Pro';
+                document.getElementById('welcomeDescription').value = '';
+                showNotification('🔄 Conteúdo restaurado');
+            }
+        }
+
+        // BRANDING
+        function previewLogo(e) {
+            const file = e.target.files[0];
+            if (file && file.size > 500 * 1024) {
+                alert('Arquivo muito grande! Máximo 500KB');
+                return;
+            }
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById('logoPreview').innerHTML = `<img src="${event.target.result}" style="max-width: 100%; max-height: 100%; border-radius: 6px;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveBranding(e) {
+            e.preventDefault();
+            const fontFamily = document.getElementById('fontFamily').value;
+            const logoInput = document.getElementById('logoUpload');
+
+            let settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+            settings.customBranding = settings.customBranding || {};
+            settings.customBranding.fontFamily = fontFamily;
+
+            if (logoInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    settings.customBranding.logoBase64 = event.target.result;
+                    localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+                    showNotification('✅ Logo e fonte salvos!');
+                };
+                reader.readAsDataURL(logoInput.files[0]);
+            } else {
+                localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+                showNotification('✅ Fonte salva!');
+            }
+        }
+
+        function logout() {
+            if (confirm('Sair do painel admin?')) {
+                window.location.href = './sleepcare_telemedicine_complete.html';
+            }
+        }
+
+        // EXPORT FUNCTIONS
+        function getTimestamp() {
+            const now = new Date();
+            return now.toISOString().replace(/[:.]/g, '-').slice(0, -5);
+        }
+
+        function downloadJSON(data, filename) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportColors() {
+            const colors = {
+                primary: document.getElementById('colorPrimary').value,
+                secondary: document.getElementById('colorSecondary').value,
+                accent: document.getElementById('colorAccent').value,
+                light: document.getElementById('colorLight').value,
+                dark: document.getElementById('colorDark').value,
+                border: document.getElementById('colorBorder').value,
+                textGray: document.getElementById('colorTextGray').value,
+                success: document.getElementById('colorSuccess').value,
+                warning: document.getElementById('colorWarning').value,
+                exportDate: new Date().toLocaleString('pt-BR')
+            };
+
+            downloadJSON(colors, `backup-cores-${getTimestamp()}.json`);
+            showNotification('✅ Cores exportadas! Arquivo salve em backups/cores/');
+        }
+
+        function exportScales() {
+            const scales = {
+                psqi: document.getElementById('scalePSQI').value,
+                isi: document.getElementById('scaleISI').value,
+                ese: document.getElementById('scaleESE').value,
+                stopBang: document.getElementById('scaleSTOPBANG').value,
+                exportDate: new Date().toLocaleString('pt-BR')
+            };
+
+            downloadJSON(scales, `backup-escalas-${getTimestamp()}.json`);
+            showNotification('✅ Escalas exportadas! Arquivo salve em backups/escalas/');
+        }
+
+        function exportProtocol() {
+            const protocol = {
+                intro: document.getElementById('protocolIntro').value,
+                weeks: {}
+            };
+            for (let i = 1; i <= 8; i++) {
+                protocol.weeks[i] = document.getElementById(`protocolWeek${i}`).value;
+            }
+            protocol.exportDate = new Date().toLocaleString('pt-BR');
+
+            downloadJSON(protocol, `backup-protocolo-${getTimestamp()}.json`);
+            showNotification('✅ Protocolo exportado! Arquivo salve em backups/protocolo/');
+        }
+
+        function exportContent() {
+            const content = {
+                welcomeTitle: document.getElementById('welcomeTitle').value,
+                welcomeDescription: document.getElementById('welcomeDescription').value,
+                exportDate: new Date().toLocaleString('pt-BR')
+            };
+
+            downloadJSON(content, `backup-conteudo-${getTimestamp()}.json`);
+            showNotification('✅ Conteúdo exportado! Arquivo salve em backups/conteudo/');
+        }
+
+        function exportFullBackup() {
+            const settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+            const backup = {
+                ...settings,
+                exportDate: new Date().toLocaleString('pt-BR'),
+                version: '1.0'
+            };
+
+            downloadJSON(backup, `backup-completo-${getTimestamp()}.json`);
+            showNotification('✅ Backup completo exportado! Arquivo salve em backups/');
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    // Detect what type of backup this is
+                    if (data.weeks || (data.intro && data.weeks)) {
+                        // Protocol backup
+                        document.getElementById('protocolIntro').value = data.intro || '';
+                        for (let i = 1; i <= 8; i++) {
+                            document.getElementById(`protocolWeek${i}`).value = data.weeks[i] || '';
+                        }
+                        showNotification('✅ Protocolo restaurado do backup!');
+                    } else if (data.psqi || data.isi) {
+                        // Scales backup
+                        document.getElementById('scalePSQI').value = data.psqi || '';
+                        document.getElementById('scaleISI').value = data.isi || '';
+                        document.getElementById('scaleESE').value = data.ese || '';
+                        document.getElementById('scaleSTOPBANG').value = data.stopBang || '';
+                        showNotification('✅ Escalas restauradas do backup!');
+                    } else if (data.primary) {
+                        // Colors backup
+                        document.getElementById('colorPrimary').value = data.primary || '#C76134';
+                        document.getElementById('colorSecondary').value = data.secondary || '#99A8AD';
+                        document.getElementById('colorAccent').value = data.accent || '#49401F';
+                        document.getElementById('colorLight').value = data.light || '#EADACA';
+                        document.getElementById('colorDark').value = data.dark || '#62210F';
+                        document.getElementById('colorBorder').value = data.border || '#D4C4C0';
+                        document.getElementById('colorTextGray').value = data.textGray || '#8B7355';
+                        document.getElementById('colorSuccess').value = data.success || '#49401F';
+                        document.getElementById('colorWarning').value = data.warning || '#C76134';
+                        showNotification('✅ Cores restauradas do backup!');
+                    } else if (data.welcomeTitle || data.customColors) {
+                        // Full backup
+                        let settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+                        Object.assign(settings, data);
+                        localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+                        location.reload();
+                    }
+                } catch (error) {
+                    showNotification('❌ Erro ao importar backup: ' + error.message, 'error');
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadAllBackups(folder) {
+            showNotification(`📂 Para acessar os backups de ${folder}, visite:/backups/${folder}/`);
+        }
+
+        // LOAD ON PAGE LOAD
+        document.addEventListener('DOMContentLoaded', function() {
+            const settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+
+            if (settings.customContent) {
+                if (settings.customContent.scales) {
+                    document.getElementById('scalePSQI').value = settings.customContent.scales.psqi || '';
+                    document.getElementById('scaleISI').value = settings.customContent.scales.isi || '';
+                    document.getElementById('scaleESE').value = settings.customContent.scales.ese || '';
+                    document.getElementById('scaleSTOPBANG').value = settings.customContent.scales.stopBang || '';
+                }
+                if (settings.customContent.protocol) {
+                    document.getElementById('protocolIntro').value = settings.customContent.protocol.intro || '';
+                    for (let i = 1; i <= 8; i++) {
+                        document.getElementById(`protocolWeek${i}`).value = settings.customContent.protocol.weeks[i] || '';
+                    }
+                }
+                document.getElementById('welcomeTitle').value = settings.customContent.welcomeTitle || 'Bem-vindo ao SleepCare Pro';
+                document.getElementById('welcomeDescription').value = settings.customContent.welcomeDescription || '';
+            }
+
+            if (settings.customBranding) {
+                document.getElementById('fontFamily').value = settings.customBranding.fontFamily || 'DM Sans';
+                if (settings.customBranding.logoBase64) {
+                    document.getElementById('logoPreview').innerHTML = `<img src="${settings.customBranding.logoBase64}" style="max-width: 100%; max-height: 100%; border-radius: 6px;">`;
+                }
+            }
+
+            if (settings.customColors) {
+                const colors = settings.customColors;
+                document.getElementById('colorPrimary').value = colors.primary || '#C76134';
+                document.getElementById('colorSecondary').value = colors.secondary || '#99A8AD';
+                document.getElementById('colorAccent').value = colors.accent || '#49401F';
+                document.getElementById('colorLight').value = colors.light || '#EADACA';
+                document.getElementById('colorDark').value = colors.dark || '#62210F';
+                document.getElementById('colorBorder').value = colors.border || '#D4C4C0';
+                document.getElementById('colorTextGray').value = colors.textGray || '#8B7355';
+                document.getElementById('colorSuccess').value = colors.success || '#49401F';
+                document.getElementById('colorWarning').value = colors.warning || '#C76134';
+            }
+        });
+    </script>
+</body>
+</html>

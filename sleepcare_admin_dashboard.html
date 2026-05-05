@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Painel de Administração</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C76134;
+            --secondary: #99A8AD;
+            --accent: #49401F;
+            --light: #EADACA;
+            --dark: #62210F;
+            --border: #D4C4C0;
+            --text-gray: #8B7355;
+            --success: #49401F;
+            --warning: #C76134;
+            --danger: #62210F;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f3f4f6;
+            color: var(--dark);
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 2rem 1rem;
+            position: fixed;
+            width: 260px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            color: var(--text-gray);
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #f3f4f6;
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: rgba(199, 97, 52, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .main-content {
+            grid-column: 2;
+            padding: 2rem;
+            margin-left: 260px;
+        }
+
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a84a27;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7a8a90;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #8b1a1a;
+        }
+
+        .btn-link {
+            background: none;
+            color: var(--primary);
+            text-decoration: underline;
+            padding: 0;
+        }
+
+        .btn-link:hover {
+            color: #a84a27;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin: 0 0 0.5rem 0;
+            text-transform: uppercase;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(73, 64, 31, 0.2);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(199, 97, 52, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(98, 33, 15, 0.2);
+            color: var(--danger);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(199, 97, 52, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .patient-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .patient-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(199, 97, 52, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .patient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .patient-info h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .patient-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .questionnaire-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .result-item {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result-item h4 {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .result-item .score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .result-item .status {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 2000;
+            border-left: 4px solid var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
+
+            .main-content {
+                grid-column: 1;
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                💤 <span>Admin</span>
+            </div>
+
+            <button class="nav-item active" onclick="switchView('patients')">👥 Pacientes</button>
+            <button class="nav-item" onclick="switchView('results')">📊 Resultados</button>
+            <button class="nav-item" onclick="switchView('customize')">⚙️ Personalizar</button>
+            <button class="nav-item" onclick="switchView('export')">📥 Exportar Dados</button>
+            <button class="nav-item" onclick="logout()" style="margin-top: 2rem; color: var(--danger);">🚪 Sair</button>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- HEADER -->
+            <div class="header">
+                <div>
+                    <h1>SleepCare Pro</h1>
+                    <p style="color: var(--text-gray);">Painel de Administração</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="location.href='sleepcare_questionnaire_platform.html'" target="_blank">
+                        👁️ Ver Plataforma
+                    </button>
+                </div>
+            </div>
+
+            <!-- PATIENTS VIEW -->
+            <div id="patients" class="view active">
+                <div class="card">
+                    <h2>Gerenciar Pacientes</h2>
+                    <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Lista de pacientes registrados na plataforma.</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total de Pacientes</h3>
+                            <div class="number" id="totalPatients">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Questionários Completos</h3>
+                            <div class="number" id="completedQuestions">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Taxa de Conclusão</h3>
+                            <div class="number" id="completionRate">0%</div>
+                        </div>
+                    </div>
+
+                    <div id="patientsList"></div>
+                </div>
+            </div>
+
+            <!-- RESULTS VIEW -->
+            <div id="results" class="view">
+                <div class="card">
+                    <h2>Análise de Resultados</h2>
+                    <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Visualize os resultados dos questionários de seus pacientes.</p>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>STOP-Bang</th>
+                                    <th>PSQI</th>
+                                    <th>ISI</th>
+                                    <th>Epworth</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUSTOMIZE VIEW -->
+            <div id="customize" class="view">
+                <div class="card">
+                    <h2>⚙️ Personalizar Plataforma</h2>
+                    <p style="color: var(--text-gray); margin-bottom: 2rem;">Customize a mensagem de boas-vindas e a logo da sua clínica.</p>
+
+                    <form onsubmit="saveCustomization(event)">
+                        <h3>Mensagem de Boas-vindas</h3>
+                        <div class="form-group">
+                            <label>Título da Plataforma</label>
+                            <input type="text" id="customTitle" placeholder="Bem-vindo ao SleepCare Pro" value="Bem-vindo ao SleepCare Pro">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea id="customDescription" placeholder="Complete os questionários de avaliação do sono para monitorar sua saúde e bem-estar.">Complete os questionários de avaliação do sono para monitorar sua saúde e bem-estar.</textarea>
+                        </div>
+
+                        <h3>Logo da Clínica</h3>
+                        <div class="form-group">
+                            <label>Upload de Logo (PNG/JPG)</label>
+                            <input type="file" id="logoUpload" accept="image/png,image/jpeg" onchange="previewLogo(event)">
+                            <small style="color: var(--text-gray);">Máximo 500KB. A logo será exibida no cabeçalho da plataforma.</small>
+                        </div>
+
+                        <div id="logoPreview" style="margin: 1rem 0;"></div>
+
+                        <h3>Cores da Marca</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Cor Primária</label>
+                                <input type="color" id="primaryColor" value="#C76134">
+                            </div>
+                            <div class="form-group">
+                                <label>Cor Secundária</label>
+                                <input type="color" id="secondaryColor" value="#99A8AD">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            💾 Salvar Personalização
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- EXPORT VIEW -->
+            <div id="export" class="view">
+                <div class="card">
+                    <h2>📥 Exportar Dados</h2>
+                    <p style="color: var(--text-gray); margin-bottom: 2rem;">Exporte os dados dos pacientes e resultados dos questionários.</p>
+
+                    <div class="form-group">
+                        <label>Selecionar Formato de Exportação</label>
+                        <select id="exportFormat" style="margin-bottom: 1rem;">
+                            <option value="json">JSON (Estruturado)</option>
+                            <option value="csv">CSV (Planilha)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="exportData()">
+                        ⬇️ Baixar Dados
+                    </button>
+
+                    <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 8px;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">ℹ️ Informações sobre Exportação</h4>
+                        <ul style="margin-left: 1.5rem; color: var(--text-gray); font-size: 0.9rem;">
+                            <li>Todos os dados dos pacientes serão inclusos</li>
+                            <li>Respostas completas dos questionários</li>
+                            <li>Datas de conclusão e scores</li>
+                            <li>Conforme LGPD - dados são seus</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal active">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')" style="display: none;"></button>
+            <h2 style="margin-bottom: 1.5rem;">Acesso ao Painel de Administração</h2>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+                <p style="margin-top: 1rem; color: var(--text-gray); font-size: 0.9rem;">
+                    <strong>Demo:</strong> Email: admin@sleepcare.com | Senha: admin123
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ===== ADMIN CREDENTIALS =====
+        const ADMIN_CREDENTIALS = {
+            email: 'admin@sleepcare.com',
+            password: 'admin123'
+        };
+
+        let adminLoggedIn = false;
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminLogin();
+            loadPatientData();
+        });
+
+        // ===== AUTHENTICATION =====
+        function checkAdminLogin() {
+            const isLoggedIn = localStorage.getItem('sleepcare_admin_logged_in');
+            if (!isLoggedIn) {
+                document.getElementById('loginModal').classList.add('active');
+                document.querySelector('.wrapper').style.display = 'none';
+            } else {
+                adminLoggedIn = true;
+                document.getElementById('loginModal').classList.remove('active');
+                document.querySelector('.wrapper').style.display = 'grid';
+            }
+        }
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+                localStorage.setItem('sleepcare_admin_logged_in', 'true');
+                adminLoggedIn = true;
+                document.getElementById('loginModal').classList.remove('active');
+                document.querySelector('.wrapper').style.display = 'grid';
+                showNotification('Bem-vindo ao painel de administração! 👋', 'success');
+            } else {
+                showNotification('Email ou senha incorretos.', 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('sleepcare_admin_logged_in');
+            adminLoggedIn = false;
+            location.reload();
+        }
+
+        // ===== DATA MANAGEMENT =====
+        function loadPatientData() {
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients') || '[]');
+            displayPatients(patients);
+            displayResults(patients);
+            updateStatistics(patients);
+        }
+
+        function displayPatients(patients) {
+            const container = document.getElementById('patientsList');
+            container.innerHTML = '';
+
+            if (patients.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-gray); text-align: center; padding: 2rem;">Nenhum paciente registrado ainda.</p>';
+                return;
+            }
+
+            patients.forEach(patient => {
+                const completedCount = Object.values(patient.questionnaires).filter(q => q.completed).length;
+                const card = document.createElement('div');
+                card.className = 'patient-card';
+                card.onclick = () => showPatientDetails(patient);
+
+                card.innerHTML = `
+                    <div class="patient-header">
+                        <div class="patient-info">
+                            <h3>${patient.name}</h3>
+                            <p>📧 ${patient.email}</p>
+                            <p>📱 ${patient.phone}</p>
+                            <p>🆔 CPF: ${patient.cpf}</p>
+                        </div>
+                        <div style="text-align: right; color: var(--text-gray);">
+                            <span class="badge badge-success">${completedCount}/4 questionários</span>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Registrado: ${new Date(patient.createdAt).toLocaleDateString('pt-BR')}</p>
+                        </div>
+                    </div>
+
+                    <div class="questionnaire-results">
+                        ${Object.entries(patient.questionnaires).map(([key, q]) => `
+                            <div class="result-item">
+                                <h4>${key === 'stopBang' ? 'STOP-Bang' : key === 'psqi' ? 'PSQI' : key === 'isi' ? 'ISI' : 'Epworth'}</h4>
+                                ${q.completed ? `
+                                    <div class="score">${q.score}</div>
+                                    <div class="status">${new Date(q.date).toLocaleDateString('pt-BR')}</div>
+                                ` : `
+                                    <div style="color: var(--text-gray); font-size: 0.9rem;">—</div>
+                                    <div class="status">Não iniciado</div>
+                                `}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function displayResults(patients) {
+            const tbody = document.getElementById('resultsTable');
+            tbody.innerHTML = '';
+
+            patients.forEach(patient => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${patient.name}</strong></td>
+                    <td>${patient.questionnaires.stopBang.completed ? patient.questionnaires.stopBang.score : '—'}</td>
+                    <td>${patient.questionnaires.psqi.completed ? patient.questionnaires.psqi.score : '—'}</td>
+                    <td>${patient.questionnaires.isi.completed ? patient.questionnaires.isi.score : '—'}</td>
+                    <td>${patient.questionnaires.epworth.completed ? patient.questionnaires.epworth.score : '—'}</td>
+                    <td>${patient.questionnaires.stopBang.completed ? new Date(patient.questionnaires.stopBang.date).toLocaleDateString('pt-BR') : '—'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            if (patients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-gray);">Nenhum resultado registrado.</td></tr>';
+            }
+        }
+
+        function updateStatistics(patients) {
+            const total = patients.length;
+            const completed = patients.reduce((sum, p) => sum + Object.values(p.questionnaires).filter(q => q.completed).length, 0);
+            const total_possible = total * 4;
+            const rate = total_possible > 0 ? Math.round((completed / total_possible) * 100) : 0;
+
+            document.getElementById('totalPatients').textContent = total;
+            document.getElementById('completedQuestions').textContent = completed;
+            document.getElementById('completionRate').textContent = rate + '%';
+        }
+
+        function showPatientDetails(patient) {
+            alert(`Detalhes do Paciente: ${patient.name}\n\nQuestionários completados: ${Object.values(patient.questionnaires).filter(q => q.completed).length}/4`);
+        }
+
+        // ===== CUSTOMIZATION =====
+        function previewLogo(event) {
+            const file = event.target.files[0];
+            if (file && file.size <= 500000) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById('logoPreview');
+                    preview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; border-radius: 8px;">`;
+                    localStorage.setItem('sleepcare_logo_base64', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                showNotification('Arquivo muito grande. Máximo 500KB.', 'error');
+            }
+        }
+
+        function saveCustomization(event) {
+            event.preventDefault();
+
+            const settings = JSON.parse(localStorage.getItem('sleepcare_settings') || '{}');
+
+            settings.customContent = {
+                welcomeTitle: document.getElementById('customTitle').value,
+                welcomeDescription: document.getElementById('customDescription').value
+            };
+
+            settings.customColors = {
+                primary: document.getElementById('primaryColor').value,
+                secondary: document.getElementById('secondaryColor').value
+            };
+
+            localStorage.setItem('sleepcare_settings', JSON.stringify(settings));
+
+            // Update CSS overrides
+            const css = `:root {
+                --primary: ${document.getElementById('primaryColor').value};
+                --secondary: ${document.getElementById('secondaryColor').value};
+            }`;
+            localStorage.setItem('sleepcare_css_overrides', css);
+
+            showNotification('✓ Personalização salva com sucesso!', 'success');
+        }
+
+        // ===== EXPORT =====
+        function exportData() {
+            const patients = JSON.parse(localStorage.getItem('sleepcare_patients') || '[]');
+            const format = document.getElementById('exportFormat').value;
+
+            if (format === 'json') {
+                const dataStr = JSON.stringify(patients, null, 2);
+                downloadFile(dataStr, 'sleepcare_patients.json', 'application/json');
+            } else if (format === 'csv') {
+                let csv = 'Nome,Email,Telefone,CPF,STOP-Bang,PSQI,ISI,Epworth,Data Registro\n';
+                patients.forEach(p => {
+                    csv += `"${p.name}","${p.email}","${p.phone}","${p.cpf}",`;
+                    csv += `${p.questionnaires.stopBang.score || '—'},`;
+                    csv += `${p.questionnaires.psqi.score || '—'},`;
+                    csv += `${p.questionnaires.isi.score || '—'},`;
+                    csv += `${p.questionnaires.epworth.score || '—'},`;
+                    csv += `${new Date(p.createdAt).toLocaleDateString('pt-BR')}\n`;
+                });
+                downloadFile(csv, 'sleepcare_patients.csv', 'text/csv');
+            }
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showNotification('✓ Download iniciado!', 'success');
+        }
+
+        // ===== NAVIGATION =====
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (viewName === 'patients' || viewName === 'results') {
+                loadPatientData();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // ===== NOTIFICATIONS =====
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification`;
+            notification.style.borderLeftColor = type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--primary)';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
