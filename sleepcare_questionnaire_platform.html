@@ -1063,12 +1063,35 @@
                 lastLogin: new Date().toISOString()
             };
 
-            // Auto-create test account if doesn't exist
+            // Auto-create admin account for patient platform
+            const adminPatientAccount = {
+                id: 'admin-001',
+                name: 'Dra. Natália Vogt',
+                email: 'nataliavogt@outlook.com',
+                phone: '(11) 99999-9999',
+                cpf: '12345678901',
+                password: 'Crm53990.',
+                createdAt: new Date().toISOString(),
+                lgpdConsent: true,
+                lgpdConsentDate: new Date().toISOString(),
+                questionnaires: {
+                    stopBang: { completed: false, score: null, date: null, responses: [] },
+                    psqi: { completed: false, score: null, date: null, responses: [] },
+                    isi: { completed: false, score: null, date: null, responses: [] },
+                    epworth: { completed: false, score: null, date: null, responses: [] }
+                },
+                lastLogin: new Date().toISOString()
+            };
+
+            // Auto-create accounts if don't exist
             const patients = JSON.parse(localStorage.getItem('sleepcare_patients') || '[]');
             if (!patients.find(p => p.email === testAccount.email)) {
                 patients.push(testAccount);
-                localStorage.setItem('sleepcare_patients', JSON.stringify(patients));
             }
+            if (!patients.find(p => p.email === adminPatientAccount.email)) {
+                patients.push(adminPatientAccount);
+            }
+            localStorage.setItem('sleepcare_patients', JSON.stringify(patients));
 
             loadCustomizations();
             checkLogin();
