@@ -259,10 +259,10 @@ function handleLogin(event) {
         messageDiv.className = 'message success';
         messageDiv.textContent = `✅ Bem-vindo, ${account.name}!`;
 
-        // Redirect after 1.5 seconds
+        // Redirect after 2 seconds with cache buster
         setTimeout(() => {
-            window.location.href = 'sleepcare_questionnaire_platform.html';
-        }, 1500);
+            window.location.href = 'sleepcare_questionnaire_platform.html?v=' + Date.now();
+        }, 2000);
 
     } catch (error) {
         messageDiv.className = 'message error';
