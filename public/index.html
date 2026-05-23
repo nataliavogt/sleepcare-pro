@@ -411,13 +411,6 @@
             if (document.getElementById('diaryDate')) document.getElementById('diaryDate').value = today;
             loadDiary();
             updateProgress();
-            // Setup IMC Calculator Event Listeners
-            const heightInput = document.getElementById('height');
-            const weightInput = document.getElementById('weight');
-            if (heightInput) {
-                heightInput.addEventListener('input', calcIMC);
-                heightInput.addEventListener('change', calcIMC);
-            }
             if (weightInput) {
                 weightInput.addEventListener('input', calcIMC);
                 weightInput.addEventListener('change', calcIMC);
@@ -429,6 +422,14 @@
             const user = {
                 name: document.getElementById('loginName').value,
                 email: document.getElementById('loginEmail').value,
+            // Setup IMC Calculation Monitor
+            setInterval(function() {
+                const h = parseFloat(document.getElementById('height').value);
+                const w = parseFloat(document.getElementById('weight').value);
+                if ((h > 0 && w > 0) && (document.getElementById('height').value !== "" && document.getElementById('weight').value !== "")) {
+                    calcIMC();
+                }
+            }, 100);
                 role: document.getElementById('loginRole').value
             };
             localStorage.setItem('sleepcare_user', JSON.stringify(user));
