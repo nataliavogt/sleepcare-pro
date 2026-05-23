@@ -411,6 +411,17 @@
             if (document.getElementById('diaryDate')) document.getElementById('diaryDate').value = today;
             loadDiary();
             updateProgress();
+            // Setup IMC Calculator Event Listeners
+            const heightInput = document.getElementById('height');
+            const weightInput = document.getElementById('weight');
+            if (heightInput) {
+                heightInput.addEventListener('input', calcIMC);
+                heightInput.addEventListener('change', calcIMC);
+            }
+            if (weightInput) {
+                weightInput.addEventListener('input', calcIMC);
+                weightInput.addEventListener('change', calcIMC);
+            }
         }
 
         function handleLogin(e) {
