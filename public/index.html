@@ -168,11 +168,11 @@
                     <div class="imc-grid">
                         <div class="form-group">
                             <label>Altura (cm)</label>
-                            <input type="number" id="height" placeholder="170" step="0.1" oninput="calcIMC()">
+                            <input type="number" id="height" placeholder="170" step="0.1" oninput="calcIMC()" onchange="calcIMC()" onkeyup="calcIMC()">
                         </div>
                         <div class="form-group">
                             <label>Peso (kg)</label>
-                            <input type="number" id="weight" placeholder="75" step="0.1" oninput="calcIMC()">
+                            <input type="number" id="weight" placeholder="75" step="0.1" oninput="calcIMC()" onchange="calcIMC()" onkeyup="calcIMC()">
                         </div>
                     </div>
                     <div class="imc-result" style="display: none;" id="imcResult">
@@ -425,15 +425,6 @@
             document.getElementById('mainLayout').classList.add('active');
             document.getElementById('headerUserName').textContent = user.name;
             document.getElementById('patientCardName').textContent = user.name;
-
-            // Setup IMC Calculation Monitor
-            setInterval(function() {
-                const h = parseFloat(document.getElementById('height').value);
-                const w = parseFloat(document.getElementById('weight').value);
-                if ((h > 0 && w > 0) && (document.getElementById('height').value !== "" && document.getElementById('weight').value !== "")) {
-                    calcIMC();
-                }
-            }, 100);
         }
 
         function handleLogout() {
@@ -559,6 +550,15 @@
         }
 
         window.addEventListener('DOMContentLoaded', init);
+
+        // Continuous IMC calculation monitor - runs every 50ms
+        setInterval(function() {
+            const h = parseFloat(document.getElementById('height')?.value) || 0;
+            const w = parseFloat(document.getElementById('weight')?.value) || 0;
+            if (h > 0 && w > 0) {
+                calcIMC();
+            }
+        }, 50);
     </script>
 </body>
 </html>
