@@ -461,16 +461,20 @@
             const h = parseFloat(document.getElementById('height').value);
             const w = parseFloat(document.getElementById('weight').value);
             if (h > 0 && w > 0) {
-                const heightInMeters = h / 100; const imc = (w / (heightInMeters * heightInMeters)).toFixed(1);
+                const heightInMeters = h / 100;
+                const imcValue = w / (heightInMeters * heightInMeters);
+                const imc = imcValue.toFixed(1);
+                
                 const result = document.getElementById('imcResult');
                 result.style.display = 'block';
                 document.getElementById('imcValue').textContent = imc;
+                
                 let cat, interp;
-                if (imc < 18.5) { cat = 'Abaixo do Peso'; interp = 'IMC baixo. Consulte um médico sobre nutrição.'; }
-                else if (imc < 25) { cat = 'Peso Normal'; interp = 'Parabéns! Peso ideal. Mantenha hábitos saudáveis.'; }
-                else if (imc < 30) { cat = 'Sobrepeso'; interp = 'IMC elevado. Considere atividade física.'; }
-                else if (imc < 35) { cat = 'Obesidade Classe 1'; interp = 'Recomenda-se acompanhamento médico.'; }
-                else if (imc < 40) { cat = 'Obesidade Classe 2'; interp = 'Consulte um médico urgentemente.'; }
+                if (imcValue < 18.5) { cat = 'Abaixo do Peso'; interp = 'IMC baixo. Consulte um médico sobre nutrição.'; }
+                else if (imcValue < 25) { cat = 'Peso Normal'; interp = 'Parabéns! Peso ideal. Mantenha hábitos saudáveis.'; }
+                else if (imcValue < 30) { cat = 'Sobrepeso'; interp = 'IMC elevado. Considere atividade física.'; }
+                else if (imcValue < 35) { cat = 'Obesidade Classe 1'; interp = 'Recomenda-se acompanhamento médico.'; }
+                else if (imcValue < 40) { cat = 'Obesidade Classe 2'; interp = 'Consulte um médico urgentemente.'; }
                 else { cat = 'Obesidade Classe 3'; interp = 'Procure atendimento especializado.'; }
                 document.getElementById('imcCategory').textContent = cat;
                 document.getElementById('imcInterpretation').textContent = interp;
