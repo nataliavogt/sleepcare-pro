@@ -411,10 +411,6 @@
             if (document.getElementById('diaryDate')) document.getElementById('diaryDate').value = today;
             loadDiary();
             updateProgress();
-            if (weightInput) {
-                weightInput.addEventListener('input', calcIMC);
-                weightInput.addEventListener('change', calcIMC);
-            }
         }
 
         function handleLogin(e) {
@@ -422,6 +418,14 @@
             const user = {
                 name: document.getElementById('loginName').value,
                 email: document.getElementById('loginEmail').value,
+                role: document.getElementById('loginRole').value
+            };
+            localStorage.setItem('sleepcare_user', JSON.stringify(user));
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainLayout').classList.add('active');
+            document.getElementById('headerUserName').textContent = user.name;
+            document.getElementById('patientCardName').textContent = user.name;
+
             // Setup IMC Calculation Monitor
             setInterval(function() {
                 const h = parseFloat(document.getElementById('height').value);
@@ -430,13 +434,6 @@
                     calcIMC();
                 }
             }, 100);
-                role: document.getElementById('loginRole').value
-            };
-            localStorage.setItem('sleepcare_user', JSON.stringify(user));
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainLayout').classList.add('active');
-            document.getElementById('headerUserName').textContent = user.name;
-            document.getElementById('patientCardName').textContent = user.name;
         }
 
         function handleLogout() {
