@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Sua Saúde do Sono</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #C76134; --secondary: #99A8AD; --accent: #49401F;
+            --light: #EADACA; --dark: #62210F; --border: #D4C4C0;
+            --text-gray: #8B7355; --success: #49401F; --warning: #C76134;
+            --danger: #62210F; --white: #FFFFFF;
+        }
+        body { font-family: 'DM Sans', 'Poppins', sans-serif; background: linear-gradient(135deg, var(--light) 0%, #FFF5F0 100%); color: var(--dark); line-height: 1.6; min-height: 100vh; }
+        .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #99A8AD 0%, #7d8e95 100%); padding: 2rem; }
+        .login-card { background: var(--white); border-radius: 20px; padding: 3rem; max-width: 450px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .login-header { text-align: center; margin-bottom: 2.5rem; }
+        .login-logo { font-size: 3.5rem; margin-bottom: 1rem; }
+        .login-title { font-size: 1.8rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem; }
+        .login-subtitle { color: var(--text-gray); font-size: 0.95rem; }
+        .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-weight: 600; color: var(--dark); font-size: 0.95rem; }
+        .form-group input, .form-group select { padding: 0.85rem 1rem; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(199, 97, 52, 0.1); }
+        .btn { padding: 0.95rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, #A84A27 100%); color: var(--white); width: 100%; margin-top: 1rem; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(199, 97, 52, 0.35); }
+        .main-layout { display: none; flex-direction: column; min-height: 100vh; }
+        .main-layout.active { display: flex; }
+        .header { background: linear-gradient(135deg, var(--white) 0%, #FAF8F7 100%); border-bottom: 2px solid var(--border); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .user-section { display: flex; align-items: center; gap: 1.5rem; }
+        .user-info { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+        .user-name { font-weight: 600; color: var(--dark); font-size: 0.95rem; }
+        .user-role { color: var(--text-gray); font-size: 0.85rem; }
+        .logout-btn { background: var(--danger); color: var(--white); padding: 0.6rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .logout-btn:hover { background: #7d2f1a; }
+        .nav-container { background: var(--white); border-bottom: 1px solid var(--border); overflow-x: auto; padding: 0 2rem; }
+        .nav-tabs { display: flex; max-width: 1400px; margin: 0 auto; }
+        .tab-btn { background: none; border: none; padding: 1.25rem 1.75rem; cursor: pointer; font-size: 1rem; font-weight: 600; color: var(--text-gray); border-bottom: 3px solid transparent; transition: all 0.3s; white-space: nowrap; }
+        .tab-btn:hover { color: var(--primary); }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .content { flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; padding: 2rem; }
+        .view { display: none; }
+        .view.active { display: block; }
+        .page-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2.5rem; }
+        .btn-back-page { background: var(--secondary); color: var(--white); width: 45px; height: 45px; border-radius: 12px; border: none; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; }
+        .page-title { font-size: 2.25rem; font-weight: 700; color: var(--dark); margin: 0; }
+        .card { background: var(--white); border-radius: 15px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 2rem; border: 1px solid var(--border); }
+        .card h2 { color: var(--dark); margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .scales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .scale-card { background: linear-gradient(135deg, var(--white) 0%, #FAF8F7 100%); border: 2px solid var(--border); border-radius: 15px; padding: 1.5rem; transition: all 0.3s; position: relative; }
+        .scale-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(199, 97, 52, 0.15); border-color: var(--primary); }
+        .scale-checkbox { position: absolute; top: 1.5rem; right: 1.5rem; width: 24px; height: 24px; cursor: pointer; }
+        .scale-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .scale-card h3 { color: var(--primary); font-size: 1.25rem; margin: 0 0 0.75rem 0; }
+        .scale-description { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .scale-form { background: var(--light); padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; }
+        .scale-form select { width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; }
+        .imc-calculator { background: linear-gradient(135deg, var(--accent) 0%, #6B5B3F 100%); color: var(--white); padding: 2rem; border-radius: 15px; margin-bottom: 2rem; }
+        .imc-calculator h2 { color: var(--white); margin-bottom: 1.5rem; }
+        .imc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+        .imc-result { background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 10px; text-align: center; margin-top: 1.5rem; }
+        .imc-value { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .imc-category { font-size: 1.1rem; margin-bottom: 1rem; }
+        .selected-count { background: var(--primary); color: var(--white); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: inline-block; margin-left: 1rem; }
+        .btn-submit-all { width: 100%; background: linear-gradient(135deg, var(--primary) 0%, #A84A27 100%); color: var(--white); padding: 1rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1rem; margin-top: 2rem; }
+        .diary-form { background: var(--light); padding: 2rem; border-radius: 15px; margin-bottom: 2rem; }
+        .diary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+        .diary-entry { background: var(--white); padding: 1.5rem; border-radius: 12px; border-left: 5px solid var(--primary); }
+        .diary-entry-date { font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; }
+        .diary-entry-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-gray); }
+        .diary-entry-quality { display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--white); padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
+        .progress-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .progress-card { background: linear-gradient(135deg, var(--light) 0%, #FFF5F0 100%); padding: 2rem; border-radius: 15px; border: 2px solid var(--border); text-align: center; }
+        .progress-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .progress-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.75rem; }
+        .progress-value { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
+        .progress-bar { width: 100%; height: 8px; background: var(--border); border-radius: 10px; margin-top: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #A84A27); border-radius: 10px; transition: width 0.4s; }
+        .timeline { position: relative; padding-left: 2.5rem; }
+        .timeline::before { content: ''; position: absolute; left: 0.75rem; top: 0; bottom: 0; width: 3px; background: var(--primary); }
+        .timeline-item { margin-bottom: 2.5rem; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -2.2rem; top: 0.25rem; width: 1.2rem; height: 1.2rem; border-radius: 50%; background: var(--primary); border: 4px solid var(--white); box-shadow: 0 0 0 3px var(--primary); }
+        .timeline-week { font-size: 0.85rem; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .timeline-title { font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+        .timeline-description { color: var(--text-gray); line-height: 1.6; }
+        .csd-banner { background: linear-gradient(135deg, var(--accent) 0%, #6B5B3F 100%); color: var(--white); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; }
+        .csd-icon { font-size: 2.5rem; }
+        .csd-content h3 { color: var(--white); margin: 0 0 0.5rem 0; }
+        .notification { position: fixed; top: 20px; right: 20px; background: var(--white); padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; border-left: 4px solid var(--success); }
+        .patient-card { background: linear-gradient(135deg, #99A8AD 0%, #7d8e95 100%); color: var(--white); padding: 0.75rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; margin-left: auto; margin-right: 1rem; }
+        @media (max-width: 768px) { .header { flex-direction: column; } .user-section { width: 100%; justify-content: space-between; } .content { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">💤</div>
+                <h1 class="login-title">SleepCare Pro</h1>
+                <p class="login-subtitle">Sua Saúde do Sono em Primeiro Lugar</p>
+            </div>
+            <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" id="loginName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Acesso</label>
+                    <select id="loginRole" required>
+                        <option value="">Selecione...</option>
+                        <option value="patient">Paciente</option>
+                        <option value="professional">Profissional</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainLayout" class="main-layout">
+        <div class="header">
+            <span class="logo">💤 SleepCare Pro</span>
+            <div class="patient-card">👤 <span id="patientCardName">Paciente</span></div>
+            <div class="user-section">
+                <div class="user-info">
+                    <span class="user-name" id="headerUserName">Paciente</span>
+                    <span class="user-role" id="headerUserRole">Paciente</span>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">Sair</button>
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('scales')">📋 Escalas</button>
+                <button class="tab-btn" onclick="switchTab('diary')">📓 Diário</button>
+                <button class="tab-btn" onclick="switchTab('progress')">📊 Progresso</button>
+                <button class="tab-btn" onclick="switchTab('protocol')">🔄 TCC-I</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="scales" class="view active">
+                <div class="page-header">
+                    <button class="btn-back-page" onclick="goBack()">←</button>
+                    <h1 class="page-title">📋 Escalas + IMC</h1>
+                </div>
+
+                <div class="csd-banner">
+                    <div class="csd-icon">✅</div>
+                    <div class="csd-content">
+                        <h3>Instrumentos Validados Clinicamente</h3>
+                        <p>Escalas reconhecidas internacionalmente para avaliação de sono e IMC</p>
+                    </div>
+                </div>
+
+                <div class="imc-calculator">
+                    <h2>📏 Cálculo de IMC</h2>
+                    <div class="imc-grid">
+                        <div class="form-group">
+                            <label>Altura (cm)</label>
+                            <input type="number" id="height" placeholder="170" step="0.1" oninput="calcIMC()" onchange="calcIMC()" onkeyup="calcIMC()">
+                        </div>
+                        <div class="form-group">
+                            <label>Peso (kg)</label>
+                            <input type="number" id="weight" placeholder="75" step="0.1" oninput="calcIMC()" onchange="calcIMC()" onkeyup="calcIMC()">
+                        </div>
+                    </div>
+                    <div class="imc-result" style="display: none;" id="imcResult">
+                        <div class="imc-value" id="imcValue">-</div>
+                        <div class="imc-category" id="imcCategory">-</div>
+                        <div id="imcInterpretation"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Responda Múltiplas Escalas de Uma Vez</h2>
+                    <p style="color: var(--text-gray); margin-bottom: 1.5rem;">
+                        Selecione as escalas que deseja responder e envie todos os dados juntos
+                        <span class="selected-count" id="selectedCount">0 selecionadas</span>
+                    </p>
+                </div>
+
+                <form id="scalesForm" onsubmit="submitScales(event)">
+                    <div class="scales-grid">
+                        <div class="scale-card">
+                            <input type="checkbox" class="scale-checkbox" data-scale="psqi" onchange="updateCount()">
+                            <div class="scale-icon">🛌</div>
+                            <h3>PSQI</h3>
+                            <p class="scale-description">Pittsburgh Sleep Quality Index</p>
+                            <div class="scale-form">
+                                <label>Qualidade do seu sono?</label>
+                                <select name="psqi">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Muito boa</option>
+                                    <option value="2">Boa</option>
+                                    <option value="3">Ruim</option>
+                                    <option value="4">Muito ruim</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="scale-card">
+                            <input type="checkbox" class="scale-checkbox" data-scale="isi" onchange="updateCount()">
+                            <div class="scale-icon">😴</div>
+                            <h3>ISI</h3>
+                            <p class="scale-description">Insomnia Severity Index</p>
+                            <div class="scale-form">
+                                <label>Avaliação da insônia?</label>
+                                <select name="isi">
+                                    <option value="">Selecione...</option>
+                                    <option value="0">Sem problemas</option>
+                                    <option value="1">Leve</option>
+                                    <option value="2">Moderada</option>
+                                    <option value="3">Severa</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="scale-card">
+                            <input type="checkbox" class="scale-checkbox" data-scale="ese" onchange="updateCount()">
+                            <div class="scale-icon">🧠</div>
+                            <h3>ESE</h3>
+                            <p class="scale-description">Escala de Sofrimento Emocional</p>
+                            <div class="scale-form">
+                                <label>Bem-estar emocional?</label>
+                                <select name="ese">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Muito bem</option>
+                                    <option value="2">Bem</option>
+                                    <option value="3">Mais ou menos</option>
+                                    <option value="4">Mal</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="scale-card">
+                            <input type="checkbox" class="scale-checkbox" data-scale="stopbang" onchange="updateCount()">
+                            <div class="scale-icon">🚨</div>
+                            <h3>STOP-BANG</h3>
+                            <p class="scale-description">Apneia Obstrutiva do Sono</p>
+                            <div class="scale-form">
+                                <label>Você ronca?</label>
+                                <select name="stopbang">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit-all">📤 Enviar Escalas</button>
+                </form>
+            </div>
+
+            <div id="diary" class="view">
+                <div class="page-header">
+                    <button class="btn-back-page" onclick="goBack()">←</button>
+                    <h1 class="page-title">📓 Diário do Sono</h1>
+                </div>
+
+                <div class="card">
+                    <h2>Registrar Sono</h2>
+                    <div class="diary-form">
+                        <form id="diaryForm" onsubmit="saveDiary(event)">
+                            <div class="diary-grid">
+                                <div class="form-group">
+                                    <label>Data</label>
+                                    <input type="date" id="diaryDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Dormir</label>
+                                    <input type="time" id="sleepTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Acordar</label>
+                                    <input type="time" id="wakeTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Qualidade (1-10)</label>
+                                    <input type="number" id="sleepQuality" min="1" max="10" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Observações</label>
+                                <textarea id="diaryNotes" style="width: 100%; padding: 0.85rem; border: 2px solid var(--border); border-radius: 10px; min-height: 100px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Histórico</h2>
+                    <div id="diaryList"></div>
+                </div>
+            </div>
+
+            <div id="progress" class="view">
+                <div class="page-header">
+                    <button class="btn-back-page" onclick="goBack()">←</button>
+                    <h1 class="page-title">📊 Meu Progresso</h1>
+                </div>
+
+                <div class="progress-grid">
+                    <div class="progress-card">
+                        <div class="progress-icon">📝</div>
+                        <div class="progress-label">Diário</div>
+                        <div class="progress-value" id="diaryCount">0</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="diaryBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon">📋</div>
+                        <div class="progress-label">Escalas</div>
+                        <div class="progress-value" id="scalesCount">0</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="scalesBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon">⭐</div>
+                        <div class="progress-label">Qualidade Média</div>
+                        <div class="progress-value" id="avgQuality">-</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="qualityBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="protocol" class="view">
+                <div class="page-header">
+                    <button class="btn-back-page" onclick="goBack()">←</button>
+                    <h1 class="page-title">🔄 Protocolo TCC-I (8 Semanas)</h1>
+                </div>
+
+                <div class="card">
+                    <h2>Terapia Cognitivo-Comportamental para Insônia</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 1</div>
+                            <div class="timeline-title">Educação sobre o Sono</div>
+                            <div class="timeline-description">Compreenda os componentes e padrões pessoais de insônia.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 2</div>
+                            <div class="timeline-title">Restrição de Sono e Higiene</div>
+                            <div class="timeline-description">Ajuste do tempo na cama e rotinas de higiene do sono.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 3</div>
+                            <div class="timeline-title">Controle do Estímulo</div>
+                            <div class="timeline-description">Associe a cama apenas com sono e quebre ciclos negativos.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 4</div>
+                            <div class="timeline-title">Reestruturação Cognitiva</div>
+                            <div class="timeline-description">Identifique e modifique pensamentos disfuncionais.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 5</div>
+                            <div class="timeline-title">Relaxamento Progressivo</div>
+                            <div class="timeline-description">Técnicas de relaxamento e meditação.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 6</div>
+                            <div class="timeline-title">Consolidação de Ganhos</div>
+                            <div class="timeline-description">Revisão do progresso e ajustes finos.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 7</div>
+                            <div class="timeline-title">Prevenção de Recaída</div>
+                            <div class="timeline-description">Identificação de gatilhos e plano de ação.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-week">Semana 8</div>
+                            <div class="timeline-title">Avaliação Final</div>
+                            <div class="timeline-description">Revisão de resultados e planejamento futuro.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function init() {
+            const user = localStorage.getItem('sleepcare_user');
+            if (!user) {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainLayout').classList.remove('active');
+            } else {
+                const u = JSON.parse(user);
+                document.getElementById('mainLayout').classList.add('active');
+                document.getElementById('headerUserName').textContent = u.name;
+                document.getElementById('headerUserRole').textContent = u.role === 'patient' ? 'Paciente' : 'Profissional';
+                document.getElementById('patientCardName').textContent = u.name;
+            }
+            const today = new Date().toISOString().split('T')[0];
+            if (document.getElementById('diaryDate')) document.getElementById('diaryDate').value = today;
+            loadDiary();
+            updateProgress();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = {
+                name: document.getElementById('loginName').value,
+                email: document.getElementById('loginEmail').value,
+                role: document.getElementById('loginRole').value
+            };
+            localStorage.setItem('sleepcare_user', JSON.stringify(user));
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainLayout').classList.add('active');
+            document.getElementById('headerUserName').textContent = user.name;
+            document.getElementById('patientCardName').textContent = user.name;
+        }
+
+        function handleLogout() {
+            if (confirm('Deseja sair?')) {
+                localStorage.removeItem('sleepcare_user');
+                location.reload();
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function goBack() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function calcIMC() {
+            const h = parseFloat(document.getElementById('height').value);
+            const w = parseFloat(document.getElementById('weight').value);
+            if (h > 0 && w > 0) {
+                const heightInMeters = h / 100;
+                const imcValue = w / (heightInMeters * heightInMeters);
+                const imc = imcValue.toFixed(1);
+                
+                const result = document.getElementById('imcResult');
+                result.style.display = 'block';
+                document.getElementById('imcValue').textContent = imc;
+                
+                let cat, interp;
+                if (imcValue < 18.5) { cat = 'Abaixo do Peso'; interp = 'IMC baixo. Consulte um médico sobre nutrição.'; }
+                else if (imcValue < 25) { cat = 'Peso Normal'; interp = 'Parabéns! Peso ideal. Mantenha hábitos saudáveis.'; }
+                else if (imcValue < 30) { cat = 'Sobrepeso'; interp = 'IMC elevado. Considere atividade física.'; }
+                else if (imcValue < 35) { cat = 'Obesidade Classe 1'; interp = 'Recomenda-se acompanhamento médico.'; }
+                else if (imcValue < 40) { cat = 'Obesidade Classe 2'; interp = 'Consulte um médico urgentemente.'; }
+                else { cat = 'Obesidade Classe 3'; interp = 'Procure atendimento especializado.'; }
+                document.getElementById('imcCategory').textContent = cat;
+                document.getElementById('imcInterpretation').textContent = interp;
+            }
+        }
+
+        function updateCount() {
+            const count = document.querySelectorAll('.scale-checkbox:checked').length;
+            document.getElementById('selectedCount').textContent = count + ' selecionada' + (count !== 1 ? 's' : '');
+        }
+
+        function submitScales(e) {
+            e.preventDefault();
+            const selected = document.querySelectorAll('.scale-checkbox:checked');
+            if (selected.length === 0) { alert('Selecione pelo menos uma escala'); return; }
+            
+            let scales = JSON.parse(localStorage.getItem('sleepcare_scales')) || {};
+            selected.forEach(cb => {
+                const name = cb.dataset.scale;
+                const val = cb.parentElement.querySelector(`select[name="${name}"]`).value;
+                if (!val) { alert('Preencha todas as escalas'); return; }
+                if (!scales[name]) scales[name] = [];
+                scales[name].push({date: new Date().toISOString(), value: val});
+            });
+            localStorage.setItem('sleepcare_scales', JSON.stringify(scales));
+            document.getElementById('scalesForm').reset();
+            document.querySelectorAll('.scale-checkbox').forEach(cb => cb.checked = false);
+            updateCount();
+            updateProgress();
+            showNote('✅ Escalas salvas!');
+        }
+
+        function saveDiary(e) {
+            e.preventDefault();
+            let diary = JSON.parse(localStorage.getItem('sleepcare_diary')) || [];
+            diary.push({
+                id: Date.now(),
+                date: document.getElementById('diaryDate').value,
+                sleepTime: document.getElementById('sleepTime').value,
+                wakeTime: document.getElementById('wakeTime').value,
+                quality: parseInt(document.getElementById('sleepQuality').value),
+                notes: document.getElementById('diaryNotes').value
+            });
+            localStorage.setItem('sleepcare_diary', JSON.stringify(diary));
+            document.getElementById('diaryForm').reset();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('diaryDate').value = today;
+            loadDiary();
+            updateProgress();
+            showNote('✅ Entrada salva!');
+        }
+
+        function loadDiary() {
+            const diary = JSON.parse(localStorage.getItem('sleepcare_diary')) || [];
+            const list = document.getElementById('diaryList');
+            list.innerHTML = '';
+            if (diary.length === 0) { list.innerHTML = '<p style="color: var(--text-gray);">Nenhuma entrada</p>'; return; }
+            diary.reverse().forEach(e => {
+                const date = new Date(e.date).toLocaleDateString('pt-BR', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+                list.innerHTML += `<div class="diary-entry"><div class="diary-entry-date">${date}</div><div class="diary-entry-info"><span><strong>Dormir:</strong> ${e.sleepTime}</span><span><strong>Acordar:</strong> ${e.wakeTime}</span></div><span class="diary-entry-quality">Qualidade: ${e.quality}/10</span><p style="color: var(--text-gray); margin-top: 0.75rem;">${e.notes || 'Sem observações'}</p></div>`;
+            });
+        }
+
+        function updateProgress() {
+            const diary = JSON.parse(localStorage.getItem('sleepcare_diary')) || [];
+            const scales = JSON.parse(localStorage.getItem('sleepcare_scales')) || {};
+            document.getElementById('diaryCount').textContent = diary.length;
+            document.getElementById('diaryBar').style.width = Math.min((diary.length / 30) * 100, 100) + '%';
+            const totalScales = Object.values(scales).reduce((s, a) => s + a.length, 0);
+            document.getElementById('scalesCount').textContent = totalScales;
+            document.getElementById('scalesBar').style.width = Math.min((totalScales / 8) * 100, 100) + '%';
+            if (diary.length > 0) {
+                const avg = (diary.reduce((s, d) => s + d.quality, 0) / diary.length).toFixed(1);
+                document.getElementById('avgQuality').textContent = avg;
+                document.getElementById('qualityBar').style.width = (avg / 10) * 100 + '%';
+            }
+        }
+
+        function showNote(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.textContent = msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+
+        // Continuous IMC calculation monitor - runs every 50ms
+        setInterval(function() {
+            const h = parseFloat(document.getElementById('height')?.value) || 0;
+            const w = parseFloat(document.getElementById('weight')?.value) || 0;
+            if (h > 0 && w > 0) {
+                calcIMC();
+            }
+        }, 50);
+    </script>
+</body>
+</html>
