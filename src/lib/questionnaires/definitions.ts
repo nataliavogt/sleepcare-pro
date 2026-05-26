@@ -1,0 +1,453 @@
+import { QuestionnaireDefinition } from '../types';
+
+export const stopBangDefinition: QuestionnaireDefinition = {
+  id: 'stop-bang',
+  name: 'STOP-BANG',
+  shortName: 'STOP-BANG',
+  description:
+    'Questionário de triagem para identificar pacientes em risco de apneia obstrutiva do sono',
+  reference: 'Chung et al. (2016) - The STOP-BANG Questionnaire',
+  maxScore: 8,
+  questions: [
+    {
+      id: 'snoring',
+      text: 'Você ronca alto (rouquenho o suficiente para incomodar outras pessoas)?',
+      type: 'binary',
+      required: true,
+      help: 'Roncos que podem ser ouvidos em outro cômodo',
+    },
+    {
+      id: 'tiredness',
+      text: 'Você sente cansaço ou fadiga durante o dia?',
+      type: 'binary',
+      required: true,
+      help: 'Sonolência que afeta suas atividades diárias',
+    },
+    {
+      id: 'observed_apnea',
+      text: 'Alguém observou que você para de respirar durante o sono?',
+      type: 'binary',
+      required: true,
+      help: 'Pausa na respiração durante o sono',
+    },
+    {
+      id: 'blood_pressure',
+      text: 'Você tem pressão alta ou está em tratamento para pressão alta?',
+      type: 'binary',
+      required: true,
+      help: 'Hipertensão diagnosticada ou em tratamento',
+    },
+    {
+      id: 'bmi_weight',
+      text: 'Qual é seu peso (em kg)?',
+      type: 'numeric',
+      required: true,
+      help: 'Necessário para calcular IMC',
+    },
+    {
+      id: 'bmi_height',
+      text: 'Qual é sua altura (em cm)?',
+      type: 'numeric',
+      required: true,
+      help: 'Necessário para calcular IMC',
+    },
+    {
+      id: 'age',
+      text: 'Você tem mais de 50 anos?',
+      type: 'binary',
+      required: true,
+      help: 'Risco aumenta com a idade',
+    },
+    {
+      id: 'gender',
+      text: 'Você é do sexo masculino?',
+      type: 'binary',
+      required: true,
+      help: 'Homens têm maior risco',
+    },
+    {
+      id: 'neck_circumference',
+      text: 'Qual é o tamanho do seu pescoço?',
+      type: 'likert',
+      options: [
+        {
+          value: 'no',
+          label: 'Mulher ≤41cm ou Homem ≤43cm',
+        },
+        {
+          value: 'yes',
+          label: 'Mulher >41cm ou Homem >43cm',
+        },
+      ],
+      required: true,
+      help: 'Pescoço maior aumenta o risco',
+    },
+  ],
+  interpretations: [
+    {
+      min: 0,
+      max: 2,
+      meaning: 'Baixo risco de apneia obstrutiva do sono',
+      color: '#49401F',
+    },
+    {
+      min: 3,
+      max: 4,
+      meaning: 'Risco intermediário de apneia obstrutiva do sono',
+      color: '#C76134',
+    },
+    {
+      min: 5,
+      max: 8,
+      meaning: 'Alto risco de apneia obstrutiva do sono',
+      color: '#62210F',
+    },
+  ],
+};
+
+export const epworthDefinition: QuestionnaireDefinition = {
+  id: 'epworth',
+  name: 'Escala de Sonolência de Epworth',
+  shortName: 'Epworth',
+  description: 'Avaliação da propensão para dormir em situações do dia a dia',
+  reference: 'Johns (1991)',
+  maxScore: 24,
+  questions: [
+    {
+      id: 'q1',
+      text: 'Sentado e lendo',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q2',
+      text: 'Assistindo TV',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q3',
+      text: 'Sentado, inativo, em um local público',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q4',
+      text: 'Como passageiro de carro por uma hora sem parar',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q5',
+      text: 'Deitado à tarde para descansar',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q6',
+      text: 'Sentado e conversando com alguém',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q7',
+      text: 'Sentado tranquilamente após uma refeição sem álcool',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+    {
+      id: 'q8',
+      text: 'Em um carro parado no trânsito por alguns minutos',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nunca cochilo' },
+        { value: 1, label: 'Pequena chance' },
+        { value: 2, label: 'Chance moderada' },
+        { value: 3, label: 'Grande chance' },
+      ],
+      required: true,
+    },
+  ],
+  interpretations: [
+    {
+      min: 0,
+      max: 9,
+      meaning: 'Sonolência normal',
+      color: '#49401F',
+    },
+    {
+      min: 10,
+      max: 15,
+      meaning: 'Sonolência leve',
+      color: '#C76134',
+    },
+    {
+      min: 16,
+      max: 24,
+      meaning: 'Sonolência excessiva',
+      color: '#62210F',
+    },
+  ],
+};
+
+export const psqiDefinition: QuestionnaireDefinition = {
+  id: 'psqi',
+  name: 'Índice de Qualidade do Sono de Pittsburgh',
+  shortName: 'PSQI',
+  description: 'Avaliação abrangente da qualidade do sono nos últimos 30 dias',
+  reference: 'Buysse et al. (1989)',
+  maxScore: 21,
+  questions: [
+    {
+      id: 'bedtime',
+      text: 'A que horas você geralmente vai para cama?',
+      type: 'text',
+      required: true,
+    },
+    {
+      id: 'sleep_latency',
+      text: 'Quanto tempo leva para você adormecer? (em minutos)',
+      type: 'numeric',
+      required: true,
+    },
+    {
+      id: 'wake_time',
+      text: 'A que horas você geralmente acorda?',
+      type: 'text',
+      required: true,
+    },
+    {
+      id: 'sleep_duration',
+      text: 'Quantas horas por noite você dorme?',
+      type: 'numeric',
+      required: true,
+    },
+    {
+      id: 'sleep_efficiency',
+      text: 'Avalie sua eficiência do sono (0-3)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Sem problema' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderado' },
+        { value: 3, label: 'Severo' },
+      ],
+      required: true,
+    },
+    {
+      id: 'disturbances',
+      text: 'Frequência de distúrbios do sono (0-3)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Menos de 1x/semana' },
+        { value: 2, label: '1-2x/semana' },
+        { value: 3, label: '3 ou mais/semana' },
+      ],
+      required: true,
+    },
+    {
+      id: 'daytime_dysfunction',
+      text: 'Sonolência diurna (0-3)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Severa' },
+      ],
+      required: true,
+    },
+  ],
+  interpretations: [
+    {
+      min: 0,
+      max: 5,
+      meaning: 'Qualidade do sono boa',
+      color: '#49401F',
+    },
+    {
+      min: 6,
+      max: 21,
+      meaning: 'Qualidade do sono ruim',
+      color: '#62210F',
+    },
+  ],
+};
+
+export const isiDefinition: QuestionnaireDefinition = {
+  id: 'isi',
+  name: 'Índice de Severidade de Insônia',
+  shortName: 'ISI',
+  description: 'Avaliação rápida da severidade da insônia',
+  reference: 'Bastien et al. (2001)',
+  maxScore: 28,
+  questions: [
+    {
+      id: 'difficulty_sleep',
+      text: 'Dificuldade para iniciar o sono (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Grave' },
+        { value: 4, label: 'Muito grave' },
+      ],
+      required: true,
+    },
+    {
+      id: 'difficulty_maintain',
+      text: 'Dificuldade para manter o sono (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Grave' },
+        { value: 4, label: 'Muito grave' },
+      ],
+      required: true,
+    },
+    {
+      id: 'early_waking',
+      text: 'Acordar muito cedo de manhã (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Grave' },
+        { value: 4, label: 'Muito grave' },
+      ],
+      required: true,
+    },
+    {
+      id: 'sleep_satisfaction',
+      text: 'Satisfação com o padrão de sono atual (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Muito satisfeito' },
+        { value: 1, label: 'Satisfeito' },
+        { value: 2, label: 'Neutro' },
+        { value: 3, label: 'Insatisfeito' },
+        { value: 4, label: 'Muito insatisfeito' },
+      ],
+      required: true,
+    },
+    {
+      id: 'interference',
+      text: 'Interferência da insônia na qualidade de vida (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Grave' },
+        { value: 4, label: 'Muito grave' },
+      ],
+      required: true,
+    },
+    {
+      id: 'visible_concern',
+      text: 'Quanto de preocupação ou desconforto você sente? (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Grave' },
+        { value: 4, label: 'Muito grave' },
+      ],
+      required: true,
+    },
+    {
+      id: 'daytime_impairment',
+      text: 'Comprometimento diurno (0-4)',
+      type: 'likert',
+      options: [
+        { value: 0, label: 'Nenhuma' },
+        { value: 1, label: 'Leve' },
+        { value: 2, label: 'Moderada' },
+        { value: 3, label: 'Grave' },
+        { value: 4, label: 'Muito grave' },
+      ],
+      required: true,
+    },
+  ],
+  interpretations: [
+    {
+      min: 0,
+      max: 7,
+      meaning: 'Ausência de insônia clinicamente significativa',
+      color: '#49401F',
+    },
+    {
+      min: 8,
+      max: 14,
+      meaning: 'Insônia subclínica',
+      color: '#99A8AD',
+    },
+    {
+      min: 15,
+      max: 21,
+      meaning: 'Insônia clínica moderada',
+      color: '#C76134',
+    },
+    {
+      min: 22,
+      max: 28,
+      meaning: 'Insônia clínica severa',
+      color: '#62210F',
+    },
+  ],
+};
+
+export const questionnairesMap = {
+  'stop-bang': stopBangDefinition,
+  'epworth': epworthDefinition,
+  'psqi': psqiDefinition,
+  'isi': isiDefinition,
+} as const;
