@@ -1,0 +1,372 @@
+═══════════════════════════════════════════════════════════════════════════════
+🏥 SleepCare Pro - Plataforma de Telemedicina
+═══════════════════════════════════════════════════════════════════════════════
+
+📍 STATUS: ✅ Production Ready (v2.0 - 05/05/2026)
+
+───────────────────────────────────────────────────────────────────────────────
+🎯 VISÃO GERAL
+───────────────────────────────────────────────────────────────────────────────
+
+SleepCare Pro é uma plataforma de telemedicina especializada em Medicina do Sono.
+Permite que pacientes registrem hábitos de sono, respondam escalas clínicas (PSQI,
+ISI, ESE, STOP-BANG) e acompanhem seu progresso no protocolo TCC-i de 8 semanas.
+
+Desenvolvido por: Dra. Natália Vogt
+Lançamento: 05/05/2026
+Versão: 2.0
+
+───────────────────────────────────────────────────────────────────────────────
+🌐 LINKS DE ACESSO
+───────────────────────────────────────────────────────────────────────────────
+
+📋 Admin Panel v2 (Recomendado)
+→ http://localhost:8000/sleepcare_admin_v2.html
+
+👤 Plataforma do Paciente
+→ http://localhost:8000/sleepcare_telemedicine_complete.html
+
+🎨 Identidade Visual
+→ /Users/nataliavogt/Documents/Claude/Projects/Medicina do Sono/logo-natalia-vogt.svg
+
+───────────────────────────────────────────────────────────────────────────────
+🎨 IDENTIDADE VISUAL
+───────────────────────────────────────────────────────────────────────────────
+
+🟠 LARANJA AURORA (#C76134)
+   Uso: Cor Primária / Botões / Ações
+   Aplicação: Headers, CTAs, destaques principais
+
+🔵 AZUL ACINZENTADO (#99A8AD)
+   Uso: Cor Secundária
+   Aplicação: Elemento de suporte visual
+
+🟢 VERDE VIVO (#49401F)
+   Uso: Cor de Destaque / Sucesso
+   Aplicação: Status positivos, checkmarks
+
+🟤 AREIA DO TEMPO (#EADACA)
+   Uso: Fundo Claro
+   Aplicação: Backgrounds, cards
+
+🟫 MARROM INTENSO (#62210F)
+   Uso: Texto Escuro / Primário
+   Aplicação: Corpo do texto principal
+
+⚪ BORDA SUAVE (#D4C4C0)
+   Uso: Divisores / Bordas
+   Aplicação: Separadores, inputs
+
+🟡 TEXTO CINZA (#8B7355)
+   Uso: Texto Secundário
+   Aplicação: Subtítulos, descrições
+
+Tipografia: DM Sans (Google Fonts)
+Logo: Profissional SVG da clínica
+
+───────────────────────────────────────────────────────────────────────────────
+📊 ESCALAS CLÍNICAS
+───────────────────────────────────────────────────────────────────────────────
+
+1️⃣ PSQI - Pittsburgh Sleep Quality Index
+   • Validada internacionalmente
+   • 7 componentes do sono
+   • Duração: ~10 minutos
+   • Uso: Avaliação de qualidade geral
+
+2️⃣ ISI - Insomnia Severity Index
+   • Medida específica de insônia
+   • 7 questões diretas
+   • Duração: ~5 minutos
+   • Uso: Avaliação de severidade
+
+3️⃣ ESE - Epworth Sleepiness Scale
+   • Escala de sonolência diurna
+   • 8 cenários do dia-a-dia
+   • Duração: ~2-3 minutos
+   • Uso: Medir sonolência excessiva
+
+4️⃣ STOP-BANG
+   • Rastreamento de apneia do sono
+   • 8 questões binárias
+   • Duração: ~1 minuto
+   • Uso: Screening de apneia
+
+───────────────────────────────────────────────────────────────────────────────
+🔄 PROTOCOLO TCC-i (8 SEMANAS)
+───────────────────────────────────────────────────────────────────────────────
+
+Semana 1: AVALIAÇÃO E EDUCAÇÃO
+└─ Entendimento do ciclo sono-vigília
+└─ Apresentação do protocolo
+└─ Avaliação inicial
+
+Semana 2: HIGIENE DO SONO
+└─ Práticas recomendadas
+└─ Hábitos prejudiciais
+└─ Rotina noturna ideal
+
+Semana 3: RESTRIÇÃO DO SONO
+└─ Ajuste de tempo na cama
+└─ Sincronização circadiana
+└─ Eficiência do sono
+
+Semana 4: TERAPIA COGNITIVA
+└─ Pensamentos sobre sono
+└─ Crenças limitantes
+└─ Reestruturação cognitiva
+
+Semana 5: CONSOLIDAÇÃO DOS GANHOS
+└─ Revisão de progresso
+└─ Ajustes necessários
+└─ Estabilização
+
+Semana 6: PREVENÇÃO DE RECAÍDA
+└─ Identificação de gatilhos
+└─ Planos de contingência
+└─ Manutenção de ganhos
+
+Semana 7: ACOMPANHAMENTO
+└─ Avaliação contínua
+└─ Suporte ongoing
+└─ Automonitoramento
+
+Semana 8: CONCLUSÃO E PLANO FUTURO
+└─ Resumo dos ganhos
+└─ Plano de manutenção
+└─ Referências para continuidade
+
+───────────────────────────────────────────────────────────────────────────────
+💾 SISTEMA DE BACKUPS
+───────────────────────────────────────────────────────────────────────────────
+
+📂 ESTRUTURA DE PASTAS
+backups/
+├── cores/              → Paletas de cores customizadas
+├── escalas/            → Descrições das escalas
+├── protocolo/          → Conteúdo do TCC-i
+├── conteudo/           → Textos e boas-vindas
+├── branding/           → Logos e fontes
+├── README.md           → Documentação técnica
+└── organizar-backups.sh → Script automático
+
+🚀 EXPORTAR
+1. Admin v2 → Seção desejada
+2. Clique "💾 Exportar [Tipo]"
+3. Arquivo JSON baixa (Downloads)
+4. Execute: bash backups/organizar-backups.sh
+
+📥 IMPORTAR
+1. Admin v2 → Aba "💾 Backups"
+2. Selecione arquivo JSON
+3. Configurações restauradas!
+
+───────────────────────────────────────────────────────────────────────────────
+🔧 CUSTOMIZAÇÕES
+───────────────────────────────────────────────────────────────────────────────
+
+✅ CORES
+   • 9 cores personalizáveis
+   • Color picker visual
+   • Aplicação em tempo real
+   • Exportar/Importar
+
+✅ LOGO E FONTE
+   • Upload de imagem PNG/JPG (max 500KB)
+   • 5 fontes disponíveis (DM Sans, Poppins, Inter, Roboto, Montserrat)
+   • DM Sans recomendada (marca)
+   • Preview visual
+
+✅ ESCALAS CLÍNICAS
+   • Descrição customizável para cada escala
+   • Textos personalizados PSQI, ISI, ESE, STOP-BANG
+   • Exportar histórico
+
+✅ PROTOCOLO TCC-i
+   • 8 semanas editáveis
+   • Introdução personalizada
+   • Descrição de cada semana
+
+✅ CONTEÚDO
+   • Título de boas-vindas
+   • Descrição de boas-vindas
+   • Textos customizáveis
+
+───────────────────────────────────────────────────────────────────────────────
+👥 PERMISSÕES E ACESSO
+───────────────────────────────────────────────────────────────────────────────
+
+👨‍⚕️ ADMINISTRADOR (Dra. Natália Vogt)
+   ✅ Acesso ao Admin Panel v2
+   ✅ Customizar cores, escalas, protocolo
+   ✅ Gerenciar pacientes
+   ✅ Aprovar/rejeitar registros
+   ✅ Gerenciar backups
+   ✅ Visualizar auditoria
+   ✅ Enviar emails
+
+👤 PACIENTE
+   ✅ Acesso à plataforma de telemedicina
+   ✅ Registrar diário do sono
+   ✅ Responder escalas
+   ✅ Acompanhar progresso
+   ✅ Visualizar protocolo
+   ✅ Aceitar LGPD
+
+───────────────────────────────────────────────────────────────────────────────
+🔐 SEGURANÇA & COMPLIANCE
+───────────────────────────────────────────────────────────────────────────────
+
+CONFORMIDADE LGPD ✅
+└─ Coleta consentimento dos pacientes
+└─ Armazenamento seguro (localStorage cliente)
+└─ Logs de auditoria de acesso
+└─ Documentação de privacidade
+└─ Direito de acesso aos dados
+
+AUTENTICAÇÃO
+└─ Login de admin
+└─ Logout seguro
+└─ Sessão persistente
+
+DADOS
+└─ Armazenamento: localStorage (não envia para servidor)
+└─ Backup: JSON export/import
+└─ Sincronização: Nenhuma (seguro)
+
+───────────────────────────────────────────────────────────────────────────────
+📈 DASHBOARDS & RELATÓRIOS
+───────────────────────────────────────────────────────────────────────────────
+
+👤 DASHBOARD PACIENTE
+   • Resumo de entradas no diário
+   • Escalas respondidas
+   • Semana atual do TCC-i
+   • Progresso visual
+
+⚙️ DASHBOARD ADMIN
+   • Número de pacientes
+   • Aprovações pendentes
+   • Auditoria de ações
+   • Status da plataforma
+
+───────────────────────────────────────────────────────────────────────────────
+💻 TECNOLOGIA & STACK
+───────────────────────────────────────────────────────────────────────────────
+
+FRONTEND
+└─ HTML5, CSS3, JavaScript Vanilla
+└─ CSS Grid + Flexbox (Responsivo)
+└─ CSS Custom Properties (Tema dinâmico)
+
+PERSISTÊNCIA
+└─ localStorage (Browser)
+└─ JSON estruturado
+└─ Export/Import para backup
+
+INTEGRAÇÃO
+└─ EmailJS (Envio de emails)
+└─ Google Fonts (Tipografia)
+
+RESPONSIVIDADE
+└─ Desktop (1200px+)
+└─ Tablet (768px - 1024px)
+└─ Mobile (<768px)
+
+───────────────────────────────────────────────────────────────────────────────
+📚 DOCUMENTAÇÃO
+───────────────────────────────────────────────────────────────────────────────
+
+📖 GUIA-BACKUPS.md
+   → Guia completo sobre sistema de backups
+   → Exemplos de uso
+   → Troubleshooting
+
+🚀 ACESSO-RAPIDO.md
+   → Atalhos e quick start
+   → Exemplos de fluxo
+   → Checklist
+
+⚡ GUIA_INICIO_RAPIDO.md
+   → Primeiros passos
+   → Login e acesso
+   → Navegação básica
+
+📋 NOTION-ESTRUTURA.md
+   → Este documento
+   → Visão geral completa
+
+───────────────────────────────────────────────────────────────────────────────
+📅 TIMELINE & HISTÓRICO
+───────────────────────────────────────────────────────────────────────────────
+
+v1.0 (04/05/2026)
+✅ Platform Inicial
+✅ Admin Features Base
+✅ Patient Platform
+✅ Customizações Básicas
+
+v2.0 (05/05/2026) ← ATUAL
+✅ Admin v2 (Melhorado)
+✅ Sistema de Backups Completo
+✅ Exportação de Edições
+✅ Documentação Notion
+✅ Guia de Backups
+✅ Acesso Rápido
+
+───────────────────────────────────────────────────────────────────────────────
+🎯 PRÓXIMOS PASSOS
+───────────────────────────────────────────────────────────────────────────────
+
+☐ 1. Criar conta Notion (se não houver)
+☐ 2. Criar Workspace "SleepCare Pro"
+☐ 3. Copiar estrutura deste documento
+☐ 4. Adicionar equipe como colaboradores
+☐ 5. Testar Admin v2 e Plataforma
+☐ 6. Fazer primeiro backup
+☐ 7. Compartilhar acesso com pacientes
+☐ 8. Monitorar auditoria
+
+───────────────────────────────────────────────────────────────────────────────
+🆘 TROUBLESHOOTING RÁPIDO
+───────────────────────────────────────────────────────────────────────────────
+
+❌ Problema: Admin não mostra nada
+✅ Solução: Use sleepcare_admin_v2.html (versão melhorada)
+
+❌ Problema: Mudanças não salvam
+✅ Solução: Verifique localStorage (DevTools F12)
+
+❌ Problema: Escalas não aparecem
+✅ Solução: Exporte e importe novamente
+
+❌ Problema: Logo não mostra
+✅ Solução: Verificar tamanho (máximo 500KB PNG/JPG)
+
+───────────────────────────────────────────────────────────────────────────────
+📞 CONTATOS & INFORMAÇÕES
+───────────────────────────────────────────────────────────────────────────────
+
+RESPONSÁVEL
+Nome: Dra. Natália Vogt
+Especialidade: Medicina do Sono
+Email: nataliavogt@outlook.com
+Telefone: +55 11 98765-4321
+
+PLATAFORMA
+Versão: 2.0
+Status: ✅ Production Ready
+Última Atualização: 05/05/2026
+Servidor: localhost:8000
+
+SUPORTE
+Guia de Backups: GUIA-BACKUPS.md
+Acesso Rápido: ACESSO-RAPIDO.md
+Documentação Técnica: backups/README.md
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ PLATAFORMA PRONTA PARA PRODUÇÃO
+═══════════════════════════════════════════════════════════════════════════════
+
+Criado com ❤️ para Medicina do Sono
+SleepCare Pro v2.0 - 05/05/2026

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #EADACA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #C76134;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        p {
+            color: #99A8AD;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #62210F;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #D4C4C0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #C76134;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #a84a2a;
+        }
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+            font-size: 12px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #D4C4C0;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            color: #99A8AD;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #C76134;
+            border-bottom-color: #C76134;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💤 SleepCare Pro</h1>
+    <p>Plataforma de Questionários - Medicina do Sono</p>
+
+    <div class="tab-buttons">
+        <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" onclick="switchTab('info')">Contas</button>
+    </div>
+
+    <!-- TAB LOGIN -->
+    <div id="login" class="tab-content active">
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" value="nataliavogt@outlook.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password" value="Crm53990." required>
+            </div>
+
+            <button type="submit">Entrar</button>
+            <div id="loginMessage" class="message"></div>
+        </form>
+    </div>
+
+    <!-- TAB INFO -->
+    <div id="info" class="tab-content">
+        <button onclick="loadAccounts()">Verificar Contas</button>
+        <button onclick="createAccounts()">Criar Contas</button>
+        <div id="accountsList" style="margin-top: 20px;"></div>
+    </div>
+</div>
+
+<script>
+// Create default accounts on page load
+function initializeAccounts() {
+    const existingAccounts = localStorage.getItem('sleepcare_patients');
+
+    if (!existingAccounts) {
+        const accounts = [
+            {
+                id: 'admin-001',
+                name: 'Dra. Natália Vogt',
+                email: 'nataliavogt@outlook.com',
+                password: 'Crm53990.',
+                phone: '(11) 99999-9999',
+                cpf: '12345678901',
+                createdAt: new Date().toISOString(),
+                lgpdConsent: true,
+                questionnaires: {
+                    stopBang: { completed: false, score: null, responses: [] },
+                    psqi: { completed: false, score: null, responses: [] },
+                    isi: { completed: false, score: null, responses: [] },
+                    epworth: { completed: false, score: null, responses: [] }
+                }
+            },
+            {
+                id: 'test-001',
+                name: 'Teste',
+                email: 'teste@sleepcare.com',
+                password: 'teste123',
+                phone: '(11) 98765-4321',
+                cpf: '12345678909',
+                createdAt: new Date().toISOString(),
+                lgpdConsent: true,
+                questionnaires: {
+                    stopBang: { completed: false, score: null, responses: [] },
+                    psqi: { completed: false, score: null, responses: [] },
+                    isi: { completed: false, score: null, responses: [] },
+                    epworth: { completed: false, score: null, responses: [] }
+                }
+            }
+        ];
+
+        localStorage.setItem('sleepcare_patients', JSON.stringify(accounts));
+        console.log('Contas criadas:', accounts);
+    }
+}
+
+function switchTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+}
+
+function handleLogin(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const messageDiv = document.getElementById('loginMessage');
+
+    console.log('Login attempt:', email);
+
+    try {
+        const accountsJSON = localStorage.getItem('sleepcare_patients');
+        console.log('localStorage acesso OK, dados:', accountsJSON ? 'sim' : 'não');
+
+        if (!accountsJSON) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = 'Nenhuma conta encontrada! Clique em "Contas" para criar.';
+            return;
+        }
+
+        const accounts = JSON.parse(accountsJSON);
+        console.log('Contas encontradas:', accounts.length);
+
+        const account = accounts.find(a => a.email === email);
+
+        if (!account) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = `❌ Email "${email}" não encontrado`;
+            console.log('Email não encontrado. Contas disponíveis:', accounts.map(a => a.email));
+            return;
+        }
+
+        console.log('Conta encontrada:', account.name);
+
+        if (account.password !== password) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = '❌ Senha incorreta';
+            return;
+        }
+
+        console.log('Senha correta! Login bem-sucedido');
+
+        // Save current user
+        localStorage.setItem('sleepcare_current_patient', JSON.stringify(account));
+
+        messageDiv.className = 'message success';
+        messageDiv.textContent = `✅ Bem-vindo, ${account.name}!`;
+
+        // Redirect after 2 seconds with cache buster
+        setTimeout(() => {
+            window.location.href = 'sleepcare_questionnaire_platform.html?v=' + Date.now();
+        }, 2000);
+
+    } catch (error) {
+        messageDiv.className = 'message error';
+        messageDiv.textContent = `❌ Erro: ${error.message}`;
+        console.error('Erro no login:', error);
+    }
+}
+
+function loadAccounts() {
+    const accountsList = document.getElementById('accountsList');
+
+    try {
+        const accountsJSON = localStorage.getItem('sleepcare_patients');
+
+        if (!accountsJSON) {
+            accountsList.innerHTML = '<div class="message info">Nenhuma conta encontrada</div>';
+            return;
+        }
+
+        const accounts = JSON.parse(accountsJSON);
+        let html = '<div class="message info" style="text-align: left">';
+
+        accounts.forEach(acc => {
+            html += `<p><strong>${acc.name}</strong><br>📧 ${acc.email}<br>🔑 ${acc.password}</p>`;
+        });
+
+        html += '</div>';
+        accountsList.innerHTML = html;
+
+    } catch (error) {
+        accountsList.innerHTML = `<div class="message error">Erro: ${error.message}</div>`;
+    }
+}
+
+function createAccounts() {
+    const accounts = [
+        {
+            id: 'admin-001',
+            name: 'Dra. Natália Vogt',
+            email: 'nataliavogt@outlook.com',
+            password: 'Crm53990.',
+            phone: '(11) 99999-9999',
+            cpf: '12345678901',
+            createdAt: new Date().toISOString(),
+            lgpdConsent: true,
+            questionnaires: {
+                stopBang: { completed: false, score: null, responses: [] },
+                psqi: { completed: false, score: null, responses: [] },
+                isi: { completed: false, score: null, responses: [] },
+                epworth: { completed: false, score: null, responses: [] }
+            }
+        },
+        {
+            id: 'test-001',
+            name: 'Teste',
+            email: 'teste@sleepcare.com',
+            password: 'teste123',
+            phone: '(11) 98765-4321',
+            cpf: '12345678909',
+            createdAt: new Date().toISOString(),
+            lgpdConsent: true,
+            questionnaires: {
+                stopBang: { completed: false, score: null, responses: [] },
+                psqi: { completed: false, score: null, responses: [] },
+                isi: { completed: false, score: null, responses: [] },
+                epworth: { completed: false, score: null, responses: [] }
+            }
+        }
+    ];
+
+    localStorage.setItem('sleepcare_patients', JSON.stringify(accounts));
+
+    const accountsList = document.getElementById('accountsList');
+    accountsList.innerHTML = '<div class="message success">✅ Contas criadas com sucesso!</div>';
+
+    loadAccounts();
+}
+
+// Initialize on load
+window.addEventListener('load', initializeAccounts);
+</script>
+
+</body>
+</html>

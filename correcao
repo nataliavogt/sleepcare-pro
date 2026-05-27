@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SleepCare Pro">
+    <meta name="theme-color" content="#C76134">
+    <title>SleepCare Pro - Questionários de Medicina do Sono</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    :root {
+        --primary: #C76134;
+        --secondary: #99A8AD;
+        --accent: #49401F;
+        --light: #EADACA;
+        --dark: #62210F;
+        --border: #D4C4C0;
+        --text-gray: #8B7355;
+        --success: #49401F;
+        --danger: #62210F;
+    }
+
+    html, body {
+        height: 100%;
+        font-family: 'DM Sans', 'Poppins', sans-serif;
+        background: var(--light);
+        color: var(--dark);
+    }
+
+    /* Header */
+    .header {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logout-btn {
+        background: var(--danger);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+        background: #8b1a1a;
+    }
+
+    /* Container */
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Forms */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 1rem;
+        color: var(--dark);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(199, 97, 52, 0.1);
+    }
+
+    .error-message {
+        color: var(--danger);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .success-message {
+        color: var(--success);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+        width: 100%;
+    }
+
+    .btn-primary:hover {
+        background: #a84a27;
+        transform: translateY(-2px);
+    }
+
+    .btn-primary:disabled {
+        background: var(--text-gray);
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        background: var(--secondary);
+        color: white;
+        margin-top: 0.5rem;
+    }
+
+    .btn-link {
+        background: none;
+        color: var(--primary);
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+
+    .btn-link:hover {
+        color: #a84a27;
+    }
+
+    /* Tabs */
+    .tab-group {
+        display: flex;
+        gap: 0;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+        background: none;
+        border: none;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-gray);
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+    }
+
+    /* Modals */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-gray);
+    }
+
+    .modal-header {
+        margin-bottom: 2rem;
+    }
+
+    .modal-header h2 {
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Cards */
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 2rem;
+    }
+
+    .card h2 {
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+    }
+
+    .questionnaire-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .questionnaire-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+    }
+
+    .questionnaire-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(199, 97, 52, 0.15);
+    }
+
+    .questionnaire-card .status {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        background: #f3f4f6;
+        color: var(--text-gray);
+    }
+
+    .questionnaire-card h3 {
+        margin: 1rem 0;
+        color: var(--dark);
+    }
+
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 2000;
+        animation: slideIn 0.3s ease;
+        max-width: 400px;
+    }
+
+    .notification.error {
+        border-left: 4px solid var(--danger);
+    }
+
+    .notification.success {
+        border-left: 4px solid var(--success);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container { padding: 1rem; }
+        .modal-content { width: 95%; padding: 1.5rem; }
+        .questionnaire-grid { grid-template-columns: 1fr; }
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">💤 <span>SleepCare Pro</span></div>
+        <div class="user-info" id="userInfoSection" style="display: none;">
+            <span>👤 <span id="currentUser">Paciente</span></span>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
+    </div>
+
+```
+<!-- MAIN CONTENT -->
+<div class="container" id="mainContent" style="display: none;">
+    <div id="dashboard-view" class="card">
+        <h2>📋 Bem-vindo ao SleepCare Pro</h2>
+        <p style="color: var(--text-gray); margin-bottom: 2rem;">
+            Complete os questionários de avaliação do sono para monitorar sua saúde e bem-estar.
+        </p>
+        <h3 style="color: var(--primary); margin: 1.5rem 0 1rem 0;">Questionários Disponíveis</h3>
+        <div class="questionnaire-grid">
+            <div class="questionnaire-card" onclick="alert('STOP-Bang - Em breve')">
+                <div class="status">Disponível</div>
+                <h3>STOP-Bang</h3>
+                <p>Triagem de apneia do sono</p>
+                <p style="font-size: 0.8rem; color: var(--text-gray);">8 perguntas • ~5 minutos</p>
+            </div>
+            <div class="questionnaire-card" onclick="alert('PSQI - Em breve')">
+                <div class="status">Disponível</div>
+                <h3>PSQI</h3>
+                <p>Índice de qualidade do sono</p>
+                <p style="font-size: 0.8rem; color: var(--text-gray);">19 perguntas • ~10 minutos</p>
+            </div>
+            <div class="questionnaire-card" onclick="alert('ISI - Em breve')">
+                <div class="status">Disponível</div>
+                <h3>ISI</h3>
+                <p>Gravidade da insônia</p>
+                <p style="font-size: 0.8rem; color: var(--text-gray);">7 perguntas • ~5 minutos</p>
+            </div>
+            <div class="questionnaire-card" onclick="alert('ESE - Em breve')">
+                <div class="status">Disponível</div>
+                <h3>ESE</h3>
+                <p>Escala de Sonolência de Epworth</p>
+                <p style="font-size: 0.8rem; color: var(--text-gray);">8 perguntas • ~5 minutos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN/REGISTRATION MODAL -->
+<div id="authModal" class="modal active">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('authModal')" style="display: none;"></button>
+        
+        <div class="tab-group">
+            <button class="tab-btn active" onclick="switchTab('login')">Fazer Login</button>
+            <button class="tab-btn" onclick="switchTab('register')">Criar Conta</button>
+        </div>
+
+        <!-- LOGIN TAB -->
+        <div id="login-tab" class="modal-content-tab active">
+            <div class="modal-header">
+                <h2>Bem-vindo de Volta</h2>
+                <p>Acesse sua conta SleepCare Pro</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button type="button" class="btn-link" onclick="switchTab('register')">Não tem conta? Crie uma</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- REGISTRATION TAB -->
+        <div id="register-tab" class="modal-content-tab" style="display: none;">
+            <div class="modal-header">
+                <h2>Criar Conta</h2>
+                <p>Comece a usar SleepCare Pro hoje</p>
+            </div>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" id="registerName" placeholder="Seu nome" required minlength="3">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="tel" id="registerPhone" placeholder="(XX) XXXXX-XXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>CPF</label>
+                    <input type="text" id="registerCPF" placeholder="XXX.XXX.XXX-XX" required>
+                    <small id="cpfValidation" style="color: var(--text-gray); margin-top: 0.25rem; display: block;"></small>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="registerPassword" placeholder="Mínimo 8 caracteres" required minlength="8">
+                    <small style="color: var(--text-gray);">Mínimo 8 caracteres</small>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Senha</label>
+                    <input type="password" id="registerPasswordConfirm" placeholder="Confirme sua senha" required>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0;">
+                        <input type="checkbox" id="registerLGPD" required style="width: auto;">
+                        Concordo com a política de privacidade
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Criar Conta</button>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button type="button" class="btn-link" onclick="switchTab('login')">Já tem conta? Faça login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== STORAGE FUNCTIONS =====
+    function getUsers() {
+        const stored = localStorage.getItem('sleepcare_users');
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveUser(user) {
+        const users = getUsers();
+        const userExists = users.find(u => u.email === user.email);
+        if (userExists) {
+            return false; // Email já existe
+        }
+        users.push(user);
+        localStorage.setItem('sleepcare_users', JSON.stringify(users));
+        return true;
+    }
+
+    function findUser(email, password) {
+        const users = getUsers();
+        return users.find(u => u.email === email && u.password === password);
+    }
+
+    function getCurrentUser() {
+        return localStorage.getItem('sleepcare_current_user');
+    }
+
+    function setCurrentUser(userEmail) {
+        localStorage.setItem('sleepcare_current_user', userEmail);
+    }
+
+    function clearCurrentUser() {
+        localStorage.removeItem('sleepcare_current_user');
+    }
+
+    // ===== UI FUNCTIONS =====
+    function switchTab(tabName) {
+        document.querySelectorAll('.modal-content-tab').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        const tabEl = document.getElementById(tabName + '-tab');
+        if (tabEl) {
+            tabEl.style.display = 'block';
+            event.target.classList.add('active');
+        }
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
+    function showNotification(message, type = 'success') {
+        const notif = document.createElement('div');
+        notif.className = `notification ${type}`;
+        notif.textContent = message;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
+    }
+
+    function showMainContent() {
+        document.getElementById('authModal').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        document.getElementById('userInfoSection').style.display = 'flex';
+        
+        const user = getUsers().find(u => u.email === getCurrentUser());
+        if (user) {
+            document.getElementById('currentUser').textContent = user.name;
+        }
+    }
+
+    // ===== VALIDATION =====
+    function validateCPF(cpf) {
+        const cleaned = cpf.replace(/\D/g, '');
+        if (cleaned.length !== 11) return false;
+        
+        let sum = 0;
+        let remainder;
+        
+        for (let i = 1; i <= 9; i++) {
+            sum += parseInt(cleaned.substring(i - 1, i)) * (11 - i);
+        }
+        
+        remainder = (sum * 10) % 11;
+        if (remainder === 10 || remainder === 11) remainder = 0;
+        if (remainder !== parseInt(cleaned.substring(9, 10))) return false;
+        
+        sum = 0;
+        for (let i = 1; i <= 10; i++) {
+            sum += parseInt(cleaned.substring(i - 1, i)) * (12 - i);
+        }
+        
+        remainder = (sum * 10) % 11;
+        if (remainder === 10 || remainder === 11) remainder = 0;
+        if (remainder !== parseInt(cleaned.substring(10, 11))) return false;
+        
+        return true;
+    }
+
+    // ===== FORM HANDLERS =====
+    function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+            showNotification('Por favor, preencha todos os campos', 'error');
+            return;
+        }
+
+        const user = findUser(email, password);
+        if (!user) {
+            showNotification('Email ou senha incorretos', 'error');
+            return;
+        }
+
+        setCurrentUser(email);
+        showNotification('Login realizado com sucesso!', 'success');
+        showMainContent();
+    }
+
+    function handleRegister(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('registerName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim();
+        const phone = document.getElementById('registerPhone').value.trim();
+        const cpf = document.getElementById('registerCPF').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+        const lgpd = document.getElementById('registerLGPD').checked;
+
+        // Validações
+        if (!name || !email || !phone || !cpf || !password || !passwordConfirm) {
+            showNotification('Por favor, preencha todos os campos', 'error');
+            return;
+        }
+
+        if (!validateCPF(cpf)) {
+            showNotification('CPF inválido', 'error');
+            return;
+        }
+
+        if (password !== passwordConfirm) {
+            showNotification('As senhas não correspondem', 'error');
+            return;
+        }
+
+        if (password.length < 8) {
+            showNotification('A senha deve ter no mínimo 8 caracteres', 'error');
+            return;
+        }
+
+        if (!lgpd) {
+            showNotification('Você deve concordar com a política de privacidade', 'error');
+            return;
+        }
+
+        // Verificar se email já existe
+        if (getUsers().find(u => u.email === email)) {
+            showNotification('Este email já está cadastrado', 'error');
+            return;
+        }
+
+        // Salvar usuário
+        const newUser = {
+            name: name,
+            email: email,
+            phone: phone,
+            cpf: cpf,
+            password: password,
+            createdAt: new Date().toISOString()
+        };
+
+        if (saveUser(newUser)) {
+            showNotification('Conta criada com sucesso! Faça login agora.', 'success');
+            
+            // Limpar formulário e voltar ao login
+            document.getElementById('registerForm').reset();
+            switchTab('login');
+            
+            // Preencher email no login
+            setTimeout(() => {
+                document.getElementById('loginEmail').value = email;
+                document.getElementById('loginPassword').focus();
+            }, 100);
+        } else {
+            showNotification('Erro ao criar conta', 'error');
+        }
+    }
+
+    function logout() {
+        clearCurrentUser();
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('userInfoSection').style.display = 'none';
+        document.getElementById('authModal').classList.add('active');
+        
+        // Limpar formulários
+        document.getElementById('loginForm').reset();
+        document.getElementById('registerForm').reset();
+        
+        showNotification('Você foi desconectado', 'success');
+    }
+
+    // ===== INITIALIZE =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = getCurrentUser();
+        if (currentUser && getUsers().find(u => u.email === currentUser)) {
+            showMainContent();
+        }
+    });
+
+    // CPF validation on input
+    document.addEventListener('DOMContentLoaded', function() {
+        const cpfInput = document.getElementById('registerCPF');
+        if (cpfInput) {
+            cpfInput.addEventListener('change', function() {
+                const validation = document.getElementById('cpfValidation');
+                if (validateCPF(this.value)) {
+                    validation.textContent = '✓ CPF válido';
+                    validation.style.color = 'var(--success)';
+                } else {
+                    validation.textContent = '✗ CPF inválido';
+                    validation.style.color = 'var(--danger)';
+                }
+            });
+        }
+    });
+</script>
+```
+
+</body>
+</html>

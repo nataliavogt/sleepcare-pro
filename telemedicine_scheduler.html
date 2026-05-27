@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare - Teleconsultas em Medicina do Sono</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .user-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        nav button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        nav button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .time-slot:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .time-slot.available {
+            background: #f0f8ff;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .time-slot.booked {
+            background: #f5f5f5;
+            border-color: #ccc;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .time-slot.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .appointment-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .appointment-patient {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .appointment-date {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .appointment-details {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .appointment-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-confirmed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #0c4a6e;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .action-confirm {
+            background: #10b981;
+            color: white;
+        }
+
+        .action-zoom {
+            background: #0b63e5;
+            color: white;
+        }
+
+        .action-cancel {
+            background: #ef4444;
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .zoom-link {
+            background: #e8f2ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #0b63e5;
+        }
+
+        .zoom-link a {
+            color: #0b63e5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .zoom-link a:hover {
+            text-decoration: underline;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .history-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .history-left {
+            flex: 1;
+        }
+
+        .history-patient {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .history-time {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .history-notes {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💤 SleepCare - Teleconsultas</h1>
+            <div class="user-info">
+                <span>Dr. Natália Vogt</span>
+                <span class="user-badge">Medicina do Sono</span>
+            </div>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+            <button class="nav-btn" data-view="schedule">Agendar Horário</button>
+            <button class="nav-btn" data-view="appointments">Minhas Consultas</button>
+            <button class="nav-btn" data-view="history">Histórico</button>
+            <button class="nav-btn" data-view="settings">Configurações</button>
+        </nav>
+
+        <!-- Dashboard View -->
+        <div id="dashboard" class="view">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Consultas Hoje</div>
+                    <div class="stat-value" id="todayCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Consultadas</div>
+                    <div class="stat-value" id="totalConsultations">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pacientes</div>
+                    <div class="stat-value" id="totalPatients">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Taxa de Confirmação</div>
+                    <div class="stat-value" id="confirmationRate">0%</div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="card">
+                    <h2>Próximas Consultas</h2>
+                    <div id="upcomingList">
+                        <p style="color: #999; text-align: center;">Nenhuma consulta agendada</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Horários Disponíveis</h2>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Clique para visualizar slots disponíveis</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Data</label>
+                            <input type="date" id="availableDate" value="">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Duração</label>
+                            <select id="availableDuration">
+                                <option value="30">30 minutos</option>
+                                <option value="60">1 hora</option>
+                                <option value="90">1,5 horas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="updateAvailableSlots()">Atualizar Horários</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule View -->
+        <div id="schedule" class="view hidden">
+            <div class="card">
+                <h2>Agendar Nova Teleconsulta</h2>
+                <form id="scheduleForm">
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Nome do Paciente</label>
+                        <input type="text" id="patientName" placeholder="Ex: João Silva" required>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Email</label>
+                        <input type="email" id="patientEmail" placeholder="Ex: joao@email.com" required>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Telefone</label>
+                        <input type="tel" id="patientPhone" placeholder="Ex: (11) 99999-9999" required>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Data da Consulta</label>
+                        <input type="date" id="appointmentDate" required>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Horário</label>
+                        <select id="appointmentTime" required>
+                            <option value="">Selecione um horário</option>
+                            <option value="08:00">08:00</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Duração</label>
+                        <select id="appointmentDuration" required>
+                            <option value="30">30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="90">1,5 horas</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Tipo de Consulta</label>
+                        <select id="consultationType" required>
+                            <option value="initial">Consulta Inicial</option>
+                            <option value="followup">Acompanhamento</option>
+                            <option value="prescrip">Prescrição</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Plataforma de Videoconferência</label>
+                        <select id="meetingPlatform" required>
+                            <option value="zoom">Zoom</option>
+                            <option value="google-meet">Google Meet</option>
+                            <option value="teams">Microsoft Teams</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Observações</label>
+                        <textarea id="appointmentNotes" placeholder="Adicione observações relevantes..." rows="4"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Agendar Consulta</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Appointments View -->
+        <div id="appointments" class="view hidden">
+            <div class="card">
+                <h2>Minhas Consultas Agendadas</h2>
+                <div id="appointmentsList">
+                    <p style="color: #999; text-align: center;">Nenhuma consulta agendada</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History View -->
+        <div id="history" class="view hidden">
+            <div class="card">
+                <h2>Histórico de Consultas</h2>
+                <div id="historyList">
+                    <p style="color: #999; text-align: center;">Nenhum histórico ainda</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settings" class="view hidden">
+            <div class="main-content">
+                <div class="card">
+                    <h2>Horários de Funcionamento</h2>
+                    <form id="settingsForm">
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Hora de Início</label>
+                            <input type="time" id="startTime" value="08:00">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Hora de Término</label>
+                            <input type="time" id="endTime" value="18:00">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #667eea;">Duração Padrão (minutos)</label>
+                            <input type="number" id="defaultDuration" value="60" min="15" step="15">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Integrações</h2>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9fafb; border-radius: 6px; margin-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: 600; color: #333;">Zoom</div>
+                                <div style="font-size: 13px; color: #666;">Para videoconferências</div>
+                            </div>
+                            <button type="button" class="btn btn-secondary">Conectar</button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9fafb; border-radius: 6px; margin-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: 600; color: #333;">Google Meet</div>
+                                <div style="font-size: 13px; color: #666;">Alternativa para videoconferências</div>
+                            </div>
+                            <button type="button" class="btn btn-secondary">Conectar</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9fafb; border-radius: 6px;">
+                            <div>
+                                <div style="font-weight: 600; color: #333;">Notificações por Email</div>
+                                <div style="font-size: 13px; color: #666;">Confirmações e lembretes</div>
+                            </div>
+                            <input type="checkbox" style="width: 20px; height: 20px; cursor: pointer;" checked>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let appointments = JSON.parse(localStorage.getItem('sleepcare_appointments')) || [];
+        let completedAppointments = JSON.parse(localStorage.getItem('sleepcare_completed')) || [];
+
+        // Initialize date input
+        document.getElementById('appointmentDate').min = new Date().toISOString().split('T')[0];
+        document.getElementById('availableDate').valueAsDate = new Date();
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                const view = e.target.dataset.view;
+                document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+                document.getElementById(view).classList.remove('hidden');
+
+                if (view === 'appointments') renderAppointments();
+                if (view === 'history') renderHistory();
+                if (view === 'dashboard') renderDashboard();
+            });
+        });
+
+        // Schedule form
+        document.getElementById('scheduleForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const appointment = {
+                id: Date.now(),
+                patientName: document.getElementById('patientName').value,
+                patientEmail: document.getElementById('patientEmail').value,
+                patientPhone: document.getElementById('patientPhone').value,
+                date: document.getElementById('appointmentDate').value,
+                time: document.getElementById('appointmentTime').value,
+                duration: document.getElementById('appointmentDuration').value,
+                type: document.getElementById('consultationType').value,
+                platform: document.getElementById('meetingPlatform').value,
+                notes: document.getElementById('appointmentNotes').value,
+                status: 'pending',
+                zoomLink: `https://zoom.us/j/${Math.floor(Math.random() * 900000000) + 100000000}`,
+                createdAt: new Date().toISOString()
+            };
+
+            appointments.push(appointment);
+            localStorage.setItem('sleepcare_appointments', JSON.stringify(appointments));
+
+            showNotification(`Consulta agendada para ${appointment.patientName}! ✓`, 'success');
+
+            document.getElementById('scheduleForm').reset();
+
+            setTimeout(() => {
+                document.querySelector('[data-view="appointments"]').click();
+            }, 500);
+        });
+
+        function renderAppointments() {
+            const active = appointments.filter(a => a.status !== 'completed' && a.status !== 'cancelled');
+            const list = document.getElementById('appointmentsList');
+
+            if (active.length === 0) {
+                list.innerHTML = '<p style="color: #999; text-align: center;">Nenhuma consulta agendada</p>';
+                return;
+            }
+
+            list.innerHTML = active.map(apt => `
+                <div class="appointment-item">
+                    <div class="appointment-header">
+                        <div class="appointment-patient">${apt.patientName}</div>
+                        <div class="appointment-date">${formatDate(apt.date)} às ${apt.time}</div>
+                    </div>
+                    <div class="appointment-details">
+                        📧 ${apt.patientEmail} | 📱 ${apt.patientPhone}
+                        <br>
+                        Tipo: ${getConsultationType(apt.type)} | Duração: ${apt.duration} min
+                        <br>
+                        Plataforma: ${getPlatformName(apt.platform)}
+                    </div>
+                    ${apt.notes ? `<div class="appointment-details" style="font-style: italic; color: #999;">Notas: ${apt.notes}</div>` : ''}
+                    <span class="appointment-status ${getStatusClass(apt.status)}">${getStatusText(apt.status)}</span>
+                    <div class="actions">
+                        ${apt.status === 'pending' ? `<button class="actions" style="background: #10b981; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;" onclick="confirmAppointment(${apt.id})">Confirmar</button>` : ''}
+                        <button class="actions" style="background: #0b63e5; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;" onclick="openZoomLink('${apt.zoomLink}')">Abrir Zoom</button>
+                        <button class="actions" style="background: #ef4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;" onclick="cancelAppointment(${apt.id})">Cancelar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHistory() {
+            const completed = [...appointments, ...completedAppointments].filter(a => a.status === 'completed');
+            const list = document.getElementById('historyList');
+
+            if (completed.length === 0) {
+                list.innerHTML = '<p style="color: #999; text-align: center;">Nenhum histórico ainda</p>';
+                return;
+            }
+
+            list.innerHTML = completed.map(apt => `
+                <div class="history-item">
+                    <div class="history-left">
+                        <div class="history-patient">${apt.patientName}</div>
+                        <div class="history-time">${formatDate(apt.date)} às ${apt.time} • ${apt.duration} minutos</div>
+                        <div class="history-notes">${apt.notes || 'Sem observações'}</div>
+                    </div>
+                    <span class="appointment-status status-completed">Concluída</span>
+                </div>
+            `).join('');
+        }
+
+        function renderDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayAppts = appointments.filter(a => a.date === today && a.status !== 'cancelled');
+
+            document.getElementById('todayCount').textContent = todayAppts.length;
+            document.getElementById('totalConsultations').textContent = completedAppointments.length;
+
+            const patients = new Set(appointments.map(a => a.patientEmail));
+            document.getElementById('totalPatients').textContent = patients.size;
+
+            const confirmed = appointments.filter(a => a.status === 'confirmed').length;
+            const rate = appointments.length > 0 ? Math.round((confirmed / appointments.length) * 100) : 0;
+            document.getElementById('confirmationRate').textContent = rate + '%';
+
+            const upcoming = appointments
+                .filter(a => a.status !== 'completed' && a.status !== 'cancelled')
+                .slice(0, 5);
+
+            const upcomingList = document.getElementById('upcomingList');
+            if (upcoming.length === 0) {
+                upcomingList.innerHTML = '<p style="color: #999; text-align: center;">Nenhuma consulta agendada</p>';
+            } else {
+                upcomingList.innerHTML = upcoming.map(apt => `
+                    <div class="appointment-item">
+                        <div class="appointment-header">
+                            <div class="appointment-patient">${apt.patientName}</div>
+                            <div class="appointment-date">${formatDate(apt.date)} às ${apt.time}</div>
+                        </div>
+                        <span class="appointment-status ${getStatusClass(apt.status)}">${getStatusText(apt.status)}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function confirmAppointment(id) {
+            const apt = appointments.find(a => a.id === id);
+            if (apt) {
+                apt.status = 'confirmed';
+                localStorage.setItem('sleepcare_appointments', JSON.stringify(appointments));
+                showNotification(`Consulta de ${apt.patientName} confirmada! ✓`, 'success');
+                renderAppointments();
+                renderDashboard();
+            }
+        }
+
+        function cancelAppointment(id) {
+            const apt = appointments.find(a => a.id === id);
+            if (apt && confirm(`Tem certeza que deseja cancelar a consulta de ${apt.patientName}?`)) {
+                apt.status = 'cancelled';
+                localStorage.setItem('sleepcare_appointments', JSON.stringify(appointments));
+                showNotification(`Consulta cancelada.`, 'success');
+                renderAppointments();
+                renderDashboard();
+            }
+        }
+
+        function openZoomLink(link) {
+            window.open(link, '_blank');
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getConsultationType(type) {
+            const types = { initial: 'Inicial', followup: 'Acompanhamento', prescrip: 'Prescrição' };
+            return types[type] || type;
+        }
+
+        function getPlatformName(platform) {
+            const platforms = { 'zoom': 'Zoom', 'google-meet': 'Google Meet', 'teams': 'Microsoft Teams' };
+            return platforms[platform] || platform;
+        }
+
+        function getStatusText(status) {
+            const statuses = { pending: 'Pendente', confirmed: 'Confirmada', completed: 'Concluída', cancelled: 'Cancelada' };
+            return statuses[status] || status;
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                pending: 'status-pending',
+                confirmed: 'status-confirmed',
+                completed: 'status-completed',
+                cancelled: 'status-cancelled'
+            };
+            return classes[status] || '';
+        }
+
+        function updateAvailableSlots() {
+            const date = document.getElementById('availableDate').value;
+            const duration = document.getElementById('availableDuration').value;
+            showNotification(`Horários atualizados para ${formatDate(date)} com duração de ${duration} min`, 'success');
+        }
+
+        function showNotification(message, type) {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+
+        // Settings
+        document.getElementById('settingsForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            localStorage.setItem('sleepcare_settings', JSON.stringify({
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value,
+                defaultDuration: document.getElementById('defaultDuration').value
+            }));
+            showNotification('Configurações salvas! ✓', 'success');
+        });
+
+        // Load settings
+        const settings = JSON.parse(localStorage.getItem('sleepcare_settings')) || {};
+        if (settings.startTime) document.getElementById('startTime').value = settings.startTime;
+        if (settings.endTime) document.getElementById('endTime').value = settings.endTime;
+        if (settings.defaultDuration) document.getElementById('defaultDuration').value = settings.defaultDuration;
+
+        // Initial render
+        renderDashboard();
+    </script>
+</body>
+</html>

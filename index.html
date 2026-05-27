@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Plataforma de Medicina do Sono</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C76134;
+            --secondary: #99A8AD;
+            --accent: #49401F;
+            --light: #EADACA;
+            --dark: #62210F;
+            --border: #D4C4C0;
+            --text-gray: #8B7355;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f5ede4 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(199, 97, 52, 0.2);
+            border-color: var(--primary);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h2 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a84a27;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(199, 97, 52, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7a8a90;
+        }
+
+        .features {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .features h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        .feature-text p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .status {
+            background: rgba(73, 64, 31, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .card-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">💤</div>
+            <h1>SleepCare Pro</h1>
+            <p>Plataforma Integrada de Medicina do Sono</p>
+            <div class="status">
+                ✅ Plataforma totalmente funcional e pronta para uso
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h2>Plataforma do Paciente</h2>
+                <p>Acesse questionários de avaliação do sono, realize o registro e acompanhe seus resultados.</p>
+                <a href="sleepcare_questionnaire_platform.html" class="btn btn-primary">
+                    Acessar Plataforma
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <h2>Painel de Administração</h2>
+                <p>Gerencie pacientes, visualize resultados dos questionários e personalize a plataforma.</p>
+                <a href="sleepcare_admin_dashboard.html" class="btn btn-secondary">
+                    Acessar Admin
+                </a>
+            </div>
+        </div>
+
+        <div class="features">
+            <h3>✨ Recursos Principais</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-text">
+                        <h4>4 Questionários Validados</h4>
+                        <p>STOP-Bang, PSQI, ISI e Epworth para avaliação completa do sono</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-text">
+                        <h4>LGPD Compliant</h4>
+                        <p>Proteja os dados dos seus pacientes conforme a lei</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-text">
+                        <h4>Responsivo</h4>
+                        <p>Funciona perfeitamente em computadores, tablets e smartphones</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <h4>Offline Ready</h4>
+                        <p>Trabalha completamente sem internet quando necessário</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-text">
+                        <h4>Personalizável</h4>
+                        <p>Customize cores, logo e mensagens da sua clínica</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-text">
+                        <h4>Análise de Dados</h4>
+                        <p>Exporte resultados em JSON ou CSV para análise</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <h3>🚀 Como Começar</h3>
+            <div style="line-height: 1.8; color: var(--text-gray);">
+                <p><strong style="color: var(--dark);">1. Acesse a Plataforma do Paciente</strong><br>
+                Clique em "Acessar Plataforma" acima e crie uma conta com seus dados pessoais.</p>
+
+                <p style="margin-top: 1rem;"><strong style="color: var(--dark);">2. Acesse o Painel Admin</strong><br>
+                Clique em "Acessar Admin" para gerenciar pacientes. Demo: admin@sleepcare.com / admin123</p>
+
+                <p style="margin-top: 1rem;"><strong style="color: var(--dark);">3. Personalize</strong><br>
+                No painel admin, customize a logo, cores e mensagens de boas-vindas.</p>
+
+                <p style="margin-top: 1rem;"><strong style="color: var(--dark);">4. Compartilhe</strong><br>
+                Compartilhe o link da plataforma com seus pacientes para que eles respondam aos questionários.</p>
+            </div>
+        </div>
+
+        <div class="features">
+            <h3>📝 Credenciais de Demonstração</h3>
+            <div style="background: #f3f4f6; padding: 1rem; border-radius: 8px; font-family: monospace; color: var(--dark); font-size: 0.9rem;">
+                <p><strong>Admin Panel:</strong><br>
+                Email: admin@sleepcare.com<br>
+                Senha: admin123</p>
+
+                <p style="margin-top: 1rem;"><strong>Criar Conta de Paciente:</strong><br>
+                Use "Criar Conta" na plataforma do paciente com qualquer CPF válido.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Dra. Natália Vogt - Medicina do Sono</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">SleepCare Pro | LGPD Compliant | Desenvolvido com ❤️</p>
+        </div>
+    </div>
+</body>
+</html>

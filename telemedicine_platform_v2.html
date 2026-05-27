@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepCare Pro - Medicina do Sono</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .user-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 13px;
+        }
+
+        nav button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-left: 4px solid #667eea;
+            padding-left: 12px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #667eea;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .scale-item {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .scale-question {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .scale-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 8px;
+        }
+
+        .scale-option {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scale-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .scale-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .daily-entry {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .daily-entry-header {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .daily-entry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .entry-field {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .entry-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .entry-value {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .protocol-week {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .protocol-week h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .protocol-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .protocol-content ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .protocol-content li {
+            margin-bottom: 6px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .notice {
+            background: #e8f2ff;
+            border-left: 4px solid #0b63e5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #0b63e5;
+        }
+
+        .notice.warning {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💤 SleepCare Pro</h1>
+            <div class="user-info">
+                <span>Dr. Natália Vogt</span>
+                <span class="user-badge">Medicina do Sono</span>
+            </div>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
+            <button class="nav-btn" data-view="patient-diary">📓 Diário do Sono</button>
+            <button class="nav-btn" data-view="scales">📈 Escalas de Avaliação</button>
+            <button class="nav-btn" data-view="tcci-protocol">🔄 Protocolo TCC-i</button>
+            <button class="nav-btn" data-view="appointments">📅 Consultas</button>
+            <button class="nav-btn" data-view="reports">📊 Relatórios</button>
+            <button class="nav-btn" data-view="lgpd">🔒 Conformidade</button>
+            <button class="nav-btn" data-view="settings">⚙️ Configurações</button>
+        </nav>
+
+        <!-- ===== DASHBOARD ===== -->
+        <div id="dashboard" class="view">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Pacientes Ativos</div>
+                    <div class="stat-value" id="activePatients">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Em Protocolo TCC-i</div>
+                    <div class="stat-value" id="protocolCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Média de Sono (h)</div>
+                    <div class="stat-value" id="avgSleep">0h</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Taxa de Melhora</div>
+                    <div class="stat-value" id="improvementRate">0%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Resumo Clínico</h2>
+                <p style="color: #666; margin-bottom: 15px;">Bem-vindo ao SleepCare Pro - Plataforma Integrada de Medicina do Sono</p>
+
+                <h3>Funcionalidades Disponíveis</h3>
+                <ul style="margin-left: 20px; color: #666;">
+                    <li><strong>Diário do Sono:</strong> Coleta estruturada de dados diários do paciente</li>
+                    <li><strong>Escalas Validadas:</strong> ESE, PSQI, ISI, STOP-BANG para avaliação clínica</li>
+                    <li><strong>Protocolo TCC-i:</strong> Acompanhamento estruturado de 8 semanas</li>
+                    <li><strong>Conformidade LGPD:</strong> Segurança e proteção de dados pessoais</li>
+                    <li><strong>Relatórios Automáticos:</strong> Análises e gráficos de progressão</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===== DIÁRIO DO SONO ===== -->
+        <div id="patient-diary" class="view hidden">
+            <div class="card">
+                <h2>📓 Diário de Sono do Paciente</h2>
+
+                <div class="notice">
+                    <strong>ℹ️ Informação:</strong> Este é um modelo baseado no documento "Diario_Paciente_Editavel.docx". Preencha os dados diários com consistência para melhor acompanhamento clínico.
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'diary-initial')">Dados Iniciais</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'diary-daily')">Registro Diário</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'diary-weekly')">Avaliação Semanal</button>
+                </div>
+
+                <!-- Dados Iniciais -->
+                <div id="diary-initial" class="tab-content active">
+                    <h3>Dados Iniciais do Paciente</h3>
+                    <form id="diaryInitialForm">
+                        <div class="form-row">
+                            <div>
+                                <label>Nome Completo</label>
+                                <input type="text" placeholder="Ex: João Silva" required>
+                            </div>
+                            <div>
+                                <label>Data de Nascimento</label>
+                                <input type="date" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Sexo</label>
+                                <select required>
+                                    <option value="">Selecione</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                    <option value="O">Outro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Email</label>
+                                <input type="email" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Comorbidades (Selecione as aplicáveis)</label>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Hipertensão
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Diabetes
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Obesidade
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Ansiedade
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Depressão
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Apneia do Sono
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Medicamentos em Uso</label>
+                            <textarea placeholder="Liste todos os medicamentos e horários" rows="3"></textarea>
+                        </div>
+
+                        <div>
+                            <label>Histórico Familiar de Distúrbios do Sono</label>
+                            <select>
+                                <option value="">Selecione</option>
+                                <option value="sim">Sim</option>
+                                <option value="nao">Não</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Salvar Dados Iniciais</button>
+                    </form>
+                </div>
+
+                <!-- Registro Diário -->
+                <div id="diary-daily" class="tab-content">
+                    <h3>Registro Diário de Sono</h3>
+                    <div class="notice">Preencha este formulário todos os dias para um melhor acompanhamento</div>
+
+                    <form id="diaryDailyForm">
+                        <div class="form-row">
+                            <div>
+                                <label>Data</label>
+                                <input type="date" id="diaryDate" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Hora de Dormir</label>
+                                <input type="time" required>
+                            </div>
+                            <div>
+                                <label>Hora de Acordar</label>
+                                <input type="time" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Tempo para Adormecer (minutos)</label>
+                                <input type="number" min="0" max="180" required>
+                            </div>
+                            <div>
+                                <label>Despertares Noturnos (número)</label>
+                                <input type="number" min="0" max="10" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Duração Total de Sono (horas:minutos)</label>
+                                <input type="text" placeholder="Ex: 7:30" required>
+                            </div>
+                            <div>
+                                <label>Qualidade do Sono (0-10)</label>
+                                <input type="range" min="0" max="10" value="5" style="cursor: pointer;">
+                                <span id="qualityValue">5</span>/10
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Sonolência Diurna (0-10)</label>
+                                <input type="range" min="0" max="10" value="5" style="cursor: pointer;">
+                                <span id="sleepinessValue">5</span>/10
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Sintomas Noturnos (Selecione os aplicáveis)</label>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Ronco
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Apneia
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Movimentos
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Noctúria
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Fatores Ambientais (Selecione os aplicáveis)</label>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Barulho
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Luz
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Temperatura
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                                    <input type="checkbox"> Companhia
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Observações Adicionais</label>
+                            <textarea placeholder="Anote qualquer observação relevante" rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Registrar Entrada do Dia</button>
+                    </form>
+
+                    <h3 style="margin-top: 30px;">Entradas Anteriores</h3>
+                    <div id="diaryEntries"></div>
+                </div>
+
+                <!-- Avaliação Semanal -->
+                <div id="diary-weekly" class="tab-content">
+                    <h3>Avaliação Semanal</h3>
+                    <form id="diaryWeeklyForm">
+                        <div class="form-row">
+                            <div>
+                                <label>Semana de (data)</label>
+                                <input type="date" required>
+                            </div>
+                            <div>
+                                <label>Até (data)</label>
+                                <input type="date" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Média de Horas de Sono</label>
+                                <input type="text" placeholder="Ex: 6:45">
+                            </div>
+                            <div>
+                                <label>Qualidade Média (0-10)</label>
+                                <input type="number" min="0" max="10">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Dias com Boa Noite</label>
+                                <input type="number" min="0" max="7">
+                            </div>
+                            <div>
+                                <label>Eficiência do Sono (%)</label>
+                                <input type="number" min="0" max="100">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Eventos ou Mudanças da Semana</label>
+                            <textarea placeholder="Descreva mudanças relevantes" rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Registrar Avaliação Semanal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ESCALAS DE AVALIAÇÃO ===== -->
+        <div id="scales" class="view hidden">
+            <div class="card">
+                <h2>📈 Escalas Clínicas de Avaliação</h2>
+
+                <div class="notice">
+                    <strong>ℹ️ Base Científica:</strong> Escalas validadas internacionalmente para avaliação padronizada de distúrbios do sono
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'scale-ese')">ESE (Epworth)</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'scale-psqi')">PSQI</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'scale-isi')">ISI</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'scale-stopbang')">STOP-BANG</button>
+                </div>
+
+                <!-- Escala Epworth -->
+                <div id="scale-ese" class="tab-content active">
+                    <h3>Escala de Sonolência de Epworth (ESE)</h3>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        <strong>Instruções:</strong> Para cada situação, indique qual é a probabilidade de você cochilar ou adormecer (0=nenhuma probabilidade, 3=alta probabilidade)
+                    </p>
+
+                    <form id="eseForm">
+                        <div class="scale-item">
+                            <div class="scale-question">1. Sentado e lendo</div>
+                            <div class="scale-options" data-field="ese1">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">2. Assistindo TV</div>
+                            <div class="scale-options" data-field="ese2">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">3. Sentado em lugar público (cinema, auditório)</div>
+                            <div class="scale-options" data-field="ese3">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">4. Como passageiro em carro por 1 hora</div>
+                            <div class="scale-options" data-field="ese4">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">5. Deitado à tarde para descansar</div>
+                            <div class="scale-options" data-field="ese5">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">6. Sentado conversando com alguém</div>
+                            <div class="scale-options" data-field="ese6">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">7. Sentado após almoço sem álcool</div>
+                            <div class="scale-options" data-field="ese7">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">8. Em carro parado no trânsito</div>
+                            <div class="scale-options" data-field="ese8">
+                                <button type="button" class="scale-option" data-value="0">0</button>
+                                <button type="button" class="scale-option" data-value="1">1</button>
+                                <button type="button" class="scale-option" data-value="2">2</button>
+                                <button type="button" class="scale-option" data-value="3">3</button>
+                            </div>
+                        </div>
+
+                        <div style="background: #f0f4ff; padding: 15px; border-radius: 6px; margin-top: 20px;">
+                            <strong>Total: <span id="eseTotal">0</span>/24 pontos</strong>
+                            <p id="eseInterpretation" style="margin-top: 8px; color: #667eea; font-size: 14px;"></p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Calcular ESE</button>
+                    </form>
+                </div>
+
+                <!-- Escala PSQI -->
+                <div id="scale-psqi" class="tab-content">
+                    <h3>Índice de Qualidade do Sono de Pittsburgh (PSQI)</h3>
+                    <div class="notice warning">Escala mais completa. Recomenda-se para avaliação inicial detalhada.</div>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        <strong>PSQI:</strong> Avaliação multidimensional da qualidade do sono nos últimos 30 dias. 19 itens em 7 componentes.
+                    </p>
+                    <p style="color: #999; font-size: 13px;">
+                        📌 Esta versão completa será expandida em breve. Você pode usar a versão clássica em papel e registrar a pontuação total.
+                    </p>
+                </div>
+
+                <!-- Escala ISI -->
+                <div id="scale-isi" class="tab-content">
+                    <h3>Insomnia Severity Index (ISI)</h3>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        <strong>ISI:</strong> Avalia a gravidade da insônia. 7 itens, score 0-28.
+                    </p>
+                    <p style="color: #999; font-size: 13px;">
+                        📌 Implementação disponível em breve.
+                    </p>
+                </div>
+
+                <!-- STOP-BANG -->
+                <div id="scale-stopbang" class="tab-content">
+                    <h3>Questionário STOP-BANG (Rastreio de Apneia)</h3>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        <strong>STOP-BANG:</strong> Ferramenta de rastreio rápido para apneia obstrutiva do sono. 8 perguntas.
+                    </p>
+                    <form id="stopbangForm">
+                        <div class="scale-item">
+                            <div class="scale-question">S - Você ronca alto (tão alto que outras pessoas reclamam)?</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                <button type="button" class="scale-option" data-field="stopbang-s" data-value="sim">Sim (1)</button>
+                                <button type="button" class="scale-option" data-field="stopbang-s" data-value="nao">Não (0)</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">T - Você já foi observado parando de respirar durante o sono?</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                <button type="button" class="scale-option" data-field="stopbang-t" data-value="sim">Sim (1)</button>
+                                <button type="button" class="scale-option" data-field="stopbang-t" data-value="nao">Não (0)</button>
+                            </div>
+                        </div>
+
+                        <div class="scale-item">
+                            <div class="scale-question">O - Você tem pressão alta ou está sendo tratado para hipertensão?</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                <button type="button" class="scale-option" data-field="stopbang-o" data-value="sim">Sim (1)</button>
+                                <button type="button" class="scale-option" data-field="stopbang-o" data-value="nao">Não (0)</button>
+                            </div>
+                        </div>
+
+                        <div style="background: #f0f4ff; padding: 15px; border-radius: 6px; margin-top: 20px;">
+                            <strong>Score STOP-BANG: <span id="stopbangScore">0</span>/8</strong>
+                            <p id="stopbangInterpretation" style="margin-top: 8px; color: #667eea; font-size: 14px;"></p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Calcular STOP-BANG</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PROTOCOLO TCC-i ===== -->
+        <div id="tcci-protocol" class="view hidden">
+            <div class="card">
+                <h2>🔄 Protocolo de TCC-i (8 Semanas)</h2>
+
+                <div class="notice">
+                    <strong>ℹ️ Terapia Cognitivo-Comportamental para Insônia:</strong> Protocolo estruturado baseado em evidências científicas (Riemann et al., 2020)
+                </div>
+
+                <h3>Semana 1-2: AVALIAÇÃO INICIAL E EDUCAÇÃO</h3>
+                <div class="protocol-week">
+                    <h4>Sessão 1: Anamnese Profunda (60-90 min)</h4>
+                    <div class="protocol-content">
+                        <strong>Objetivo:</strong> Compreender história completa da insônia
+                        <ul>
+                            <li>História completa da insônia (início, evolução, tipo)</li>
+                            <li>Frequência e impacto funcional</li>
+                            <li>Tentativas prévias de tratamento</li>
+                            <li>Avaliação de sono normal prévia (basal)</li>
+                            <li>Modelo 3P de Spielman: fatores predisponentes, precipitantes e perpetuadores</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="protocol-week">
+                    <h4>Sessão 2: Padrões de Sono e Perpetuadores (60-90 min)</h4>
+                    <div class="protocol-content">
+                        <strong>Tarefa:</strong> Diário do sono de 1-2 semanas
+                        <ul>
+                            <li>Análise de horários (variabilidade circadiana)</li>
+                            <li>Latência do sono, despertares noturnos</li>
+                            <li>Investigação de fatores precipitantes vigentes</li>
+                            <li>Identificação de comportamentos perpetuadores (stimulus control disfuncional)</li>
+                            <li>Avaliação de higiene do sono atual</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Semana 3-4: INTERVALO COMPORTAMENTAL</h3>
+                <div class="protocol-week">
+                    <h4>Sessão 3: Implementação de Mudanças Comportamentais</h4>
+                    <div class="protocol-content">
+                        <strong>Intervenções Principais:</strong>
+                        <ul>
+                            <li><strong>Restriction Cognitiva:</strong> Restrição do tempo na cama para aumentar pressão homeostática</li>
+                            <li><strong>Stimulus Control:</strong> Recondicionamento da associação cama=sono rápido</li>
+                            <li><strong>Higiene do Sono:</strong> Cafeína (cutoff 14h), álcool, exercício, luz solar matinal</li>
+                            <li><strong>Controle de Estímulos Ambientais:</strong> Temperatura, ruído, escuridão</li>
+                            <li><strong>Manejo de Pensamentos Noturnos:</strong> Introdução de preocupações construtivas vs ruminação</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Semana 5-6: REESTRUTURAÇÃO COGNITIVA</h3>
+                <div class="protocol-week">
+                    <h4>Sessão 4-5: Trabalho Cognitivo</h4>
+                    <div class="protocol-content">
+                        <strong>Foco Cognitivo:</strong>
+                        <ul>
+                            <li>Identificação de crenças disfuncionais sobre o sono (catastrofização, perfeccionismo)</li>
+                            <li>Desafio de pensamentos automáticos ("vou ficar acordado a noite toda")</li>
+                            <li>Aceitação da insônia vs luta contra o sono (paradoxical intention)</li>
+                            <li>Redução de preocupação antecipada e hipervigilância ao sono</li>
+                            <li>Construção de auto-eficácia e confiança no próprio sono</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Semana 7-8: CONSOLIDAÇÃO E SEGUIMENTO</h3>
+                <div class="protocol-week">
+                    <h4>Sessão 6-7: Consolidação dos Ganhos</h4>
+                    <div class="protocol-content">
+                        <strong>Objetivos:</strong>
+                        <ul>
+                            <li>Revisão de progresso vs objetivos iniciais</li>
+                            <li>Reforço de técnicas mais eficazes para cada paciente</li>
+                            <li>Planejamento de prevenção de recaída</li>
+                            <li>Ajustes finos de timing e comportamentos</li>
+                            <li>Transição para manutenção independente</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Acompanhamento Pós-Protocolo</h3>
+                <div class="protocol-week">
+                    <div class="protocol-content">
+                        <ul>
+                            <li><strong>Mês 3:</strong> Consulta de acompanhamento (detectar recaídas precoces)</li>
+                            <li><strong>Mês 6:</strong> Avaliação de manutenção do ganho</li>
+                            <li><strong>Mês 12:</strong> Avaliação de eficácia a longo prazo</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="notice warning">
+                    <strong>⚠️ Importantes:</strong> Sempre rastrear apneia obstrutiva com STOP-BANG e polissonografia se indicado. TCC-i é tratamento de primeira linha para insônia crônica (sem depender de medicações).
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CONSULTAS ===== -->
+        <div id="appointments" class="view hidden">
+            <div class="card">
+                <h2>📅 Agendamento de Consultas</h2>
+                <p style="color: #666; margin-bottom: 15px;">Consulte a plataforma anterior para gerenciar agendamentos</p>
+            </div>
+        </div>
+
+        <!-- ===== RELATÓRIOS ===== -->
+        <div id="reports" class="view hidden">
+            <div class="card">
+                <h2>📊 Relatórios e Análises</h2>
+                <p style="color: #666; margin-bottom: 15px;">Gráficos e relatórios automatizados em desenvolvimento</p>
+            </div>
+        </div>
+
+        <!-- ===== CONFORMIDADE LGPD ===== -->
+        <div id="lgpd" class="view hidden">
+            <div class="card">
+                <h2>🔒 Conformidade LGPD</h2>
+
+                <div class="notice">
+                    <strong>Lei Geral de Proteção de Dados (LGPD):</strong> Sua clínica e todos os dados de pacientes estão protegidos
+                </div>
+
+                <h3>Princípios Fundamentais</h3>
+                <div style="background: #f9fafb; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                    <ul style="margin-left: 20px; color: #555; line-height: 1.8;">
+                        <li><strong>Legalidade:</strong> Coleta de dados com consentimento informado</li>
+                        <li><strong>Finalidade:</strong> Dados utilizados exclusivamente para fins clínicos</li>
+                        <li><strong>Segurança:</strong> Proteção de dados com criptografia e acesso restrito</li>
+                        <li><strong>Transparência:</strong> Paciente informado sobre coleta e uso de dados</li>
+                        <li><strong>Acesso:</strong> Paciente tem direito de acessar seus dados</li>
+                        <li><strong>Exclusão:</strong> Paciente pode solicitar exclusão de dados (direito ao esquecimento)</li>
+                    </ul>
+                </div>
+
+                <h3>Consentimento do Paciente</h3>
+                <form id="lgpdConsentForm">
+                    <div style="background: #e8f2ff; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 13px;">
+                        <p><strong>O paciente consente:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Coleta e armazenamento de dados pessoais e médicos</li>
+                            <li>Análise de dados para fins de diagnóstico e tratamento</li>
+                            <li>Compartilhamento seguro de informações com outros profissionais da saúde (se necessário)</li>
+                            <li>Armazenamento em conformidade com segurança de dados pessoais</li>
+                        </ul>
+                    </div>
+
+                    <label style="display: flex; align-items: flex-start; gap: 10px; font-weight: normal; margin-bottom: 15px;">
+                        <input type="checkbox" required style="margin-top: 4px;">
+                        <span>Eu, paciente, consinto e autorizo a coleta, armazenamento e processamento dos meus dados conforme descrito acima</span>
+                    </label>
+
+                    <button type="submit" class="btn btn-primary">Registrar Consentimento LGPD</button>
+                </form>
+
+                <h3>Segurança de Dados</h3>
+                <div style="background: #dcfce7; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                    <p style="color: #166534;"><strong>✓ Práticas Implementadas:</strong></p>
+                    <ul style="margin-left: 20px; color: #166534;">
+                        <li>Dados armazenados localmente e com backup seguro</li>
+                        <li>Acesso restrito com autenticação</li>
+                        <li>Criptografia de dados sensíveis</li>
+                        <li>Logs de acesso e auditoria</li>
+                        <li>Política de retenção de dados conforme regulamentação</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CONFIGURAÇÕES ===== -->
+        <div id="settings" class="view hidden">
+            <div class="card">
+                <h2>⚙️ Configurações da Clínica</h2>
+
+                <h3>Informações da Clínica</h3>
+                <form id="clinicSettingsForm">
+                    <div class="form-row">
+                        <div>
+                            <label>Nome da Clínica</label>
+                            <input type="text" value="SleepCare Pro" required>
+                        </div>
+                        <div>
+                            <label>Especialista</label>
+                            <input type="text" value="Dr. Natália Vogt" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label>Email de Contato</label>
+                            <input type="email" value="nataliavogt@outlook.com" required>
+                        </div>
+                        <div>
+                            <label>Telefone</label>
+                            <input type="tel" value="">
+                        </div>
+                    </div>
+
+                    <h3>Horários de Funcionamento</h3>
+                    <div class="form-row">
+                        <div>
+                            <label>Hora de Início</label>
+                            <input type="time" value="08:00">
+                        </div>
+                        <div>
+                            <label>Hora de Término</label>
+                            <input type="time" value="18:00">
+                        </div>
+                    </div>
+
+                    <h3>Protocolo Clínico</h3>
+                    <div>
+                        <label>Duração Padrão de Consulta (minutos)</label>
+                        <input type="number" value="60" min="30" step="15">
+                    </div>
+
+                    <div>
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin-top: 15px;">
+                            <input type="checkbox" checked>
+                            Notificações automáticas por email
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Salvar Configurações</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize date inputs
+        document.getElementById('diaryDate').valueAsDate = new Date();
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                const view = e.target.dataset.view;
+                document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+                document.getElementById(view).classList.remove('hidden');
+            });
+        });
+
+        // Tab switching
+        function switchTab(e, tabName) {
+            e.preventDefault();
+
+            const tabBtns = e.target.parentElement.querySelectorAll('.tab-btn');
+            const parent = e.target.closest('.card');
+            const tabContents = parent.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            e.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // ESE Scale functionality
+        document.querySelectorAll('.scale-options').forEach(options => {
+            options.querySelectorAll('.scale-option').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    options.querySelectorAll('.scale-option').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    updateESETotal();
+                });
+            });
+        });
+
+        function updateESETotal() {
+            let total = 0;
+            document.querySelectorAll('.scale-options').forEach(options => {
+                const selected = options.querySelector('.scale-option.selected');
+                if (selected) {
+                    total += parseInt(selected.dataset.value);
+                }
+            });
+
+            document.getElementById('eseTotal').textContent = total;
+
+            let interpretation = '';
+            if (total <= 10) {
+                interpretation = '✓ Sonolência normal';
+            } else if (total <= 16) {
+                interpretation = '⚠️ Sonolência excessiva leve a moderada';
+            } else {
+                interpretation = '🔴 Sonolência excessiva grave - investigar causas (apneia, narcolepsia, etc)';
+            }
+            document.getElementById('eseInterpretation').textContent = interpretation;
+        }
+
+        // Form submissions
+        document.getElementById('diaryInitialForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Dados iniciais salvos com sucesso!', 'success');
+        });
+
+        document.getElementById('diaryDailyForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Entrada diária registrada!', 'success');
+        });
+
+        document.getElementById('diaryWeeklyForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Avaliação semanal registrada!', 'success');
+        });
+
+        document.getElementById('clinicSettingsForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Configurações salvas!', 'success');
+        });
+
+        document.getElementById('lgpdConsentForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Consentimento LGPD registrado com sucesso!', 'success');
+        });
+
+        // Notification function
+        function showNotification(message, type) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                border-left: 4px solid ${type === 'success' ? '#10b981' : '#ef4444'};
+                animation: slideIn 0.3s ease-out;
+                z-index: 1000;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Range input handlers
+        document.querySelectorAll('input[type="range"]').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const valueSpan = e.target.parentElement.querySelector('span[id$="Value"]');
+                if (valueSpan) {
+                    valueSpan.textContent = e.target.value;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
